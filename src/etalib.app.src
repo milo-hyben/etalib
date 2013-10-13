@@ -1,0 +1,10 @@
+{application, etalib,
+ [
+  {description, "TA-Lib wrapper"},
+  {vsn, git},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]}
+ ]}.
