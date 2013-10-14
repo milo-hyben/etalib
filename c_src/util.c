@@ -15,50 +15,8 @@ make_atom(ErlNifEnv* env, const char* name)
     return enif_make_atom(env, name);
 }
 
-ERL_NIF_TERM
-make_ok(etalib_st* st, ErlNifEnv* env, ERL_NIF_TERM value)
-{
-    return enif_make_tuple2(env, st->atom_ok, value);
-}
-
-ERL_NIF_TERM
-make_error(etalib_st* st, ErlNifEnv* env, const char* error)
-{
-    return enif_make_tuple2(env, st->atom_error, make_atom(env, error));
-}
-
-
-ERL_NIF_TERM
-make_object(ErlNifEnv* env, ERL_NIF_TERM pairs)
-{
-    ERL_NIF_TERM ret = enif_make_list(env, 0);
-    ERL_NIF_TERM key, val;
-
-    while(enif_get_list_cell(env, pairs, &val, &pairs)) {
-        if(!enif_get_list_cell(env, pairs, &key, &pairs)) {
-            assert(0 == 1 && "Unbalanced object pairs.");
-        }
-        val = enif_make_tuple2(env, key, val);
-        ret = enif_make_list_cell(env, val, ret);
-    }
-
-    return enif_make_tuple1(env, ret);
-}
-
-ERL_NIF_TERM
-make_array(ErlNifEnv* env, ERL_NIF_TERM list)
-{
-    ERL_NIF_TERM ret = enif_make_list(env, 0);
-    ERL_NIF_TERM item;
-
-    while(enif_get_list_cell(env, list, &item, &list)) {
-        ret = enif_make_list_cell(env, item, ret);
-    }
-
-    return ret;
-}
-
-bool has_bad_arguments(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+bool 
+has_bad_arguments(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 {
     if(argc != 2) {
         return true;
@@ -76,11 +34,16 @@ bool has_bad_arguments(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 }
 
 
-double* construct_array_from_list(ErlNifEnv* env, ERL_NIF_TERM opts, unsigned* len)
+double* 
+construct_array_from_list(ErlNifEnv* env, ERL_NIF_TERM opts, unsigned* len)
 {
     double* arr = NULL;
     *len = 0;
     enif_get_list_length(env, opts, len);
+
+    if((*len)==0)
+        return arr;
+
     arr = (double*) enif_alloc((*len) * sizeof(double));
 
     int pos = 0;
@@ -105,7 +68,8 @@ double* construct_array_from_list(ErlNifEnv* env, ERL_NIF_TERM opts, unsigned* l
     return arr;
 }
 
-double extract_option(ErlNifEnv* env, ERL_NIF_TERM opts, const char* name, double defValue)
+double 
+extract_option(ErlNifEnv* env, ERL_NIF_TERM opts, const char* name, double defValue)
 {
     double res = defValue;
     int arity;
@@ -141,3 +105,52 @@ double extract_option(ErlNifEnv* env, ERL_NIF_TERM opts, const char* name, doubl
 
     return res;
 }
+
+void
+eta_init(EtaStruct* e, ErlNifEnv* env, const ERL_NIF_TERM argv[])
+{
+    e->env = env;
+    e->atoms = enif_priv_data(env);
+    e->inValues = NULL;
+    e->outValues = NULL;
+    e->outTerms = NULL;
+    e->inLen = 0;
+    e->inValues = construct_array_from_list(env, argv[0], &e->inLen);
+    e->outValues = (double*) enif_alloc(e->inLen * sizeof(double));
+    e->outTerms = (ERL_NIF_TERM*) enif_alloc(e->inLen * sizeof(ERL_NIF_TERM));
+
+    e->startIdx = 0;
+    e->endIdx = e->inLen-1;
+}
+
+void
+eta_destroy(EtaStruct* e)
+{
+    if(e->inValues != NULL) {
+        enif_free(e->inValues);
+    }
+
+    if(e->outValues != NULL) {
+        enif_free(e->outValues);
+    }
+
+    if(e->outTerms != NULL) {
+        enif_free(e->outTerms);
+    }
+}
+
+ERL_NIF_TERM
+eta_populate_output(EtaStruct* e)
+{
+    int i;
+    for(i = 0; i < e->inLen; i++) {
+        if(i< e->outBegIdx) {
+            e->outTerms[i] = e->atoms->atom_nan;
+        }
+        else {
+            e->outTerms[i] = enif_make_double(e->env, e->outValues[i - e->outBegIdx]);
+        }
+    }
+    return enif_make_list_from_array(e->env, e->outTerms, e->inLen);
+}
+
