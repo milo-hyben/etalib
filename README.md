@@ -1,7 +1,7 @@
 etalib
 ==========
 
-Erlang wrapper for TA-Lib
+Erlang wrapper for [TA-LIB](http://ta-lib.org)
 
 Work in progress ...
 
@@ -29,3 +29,12 @@ Implemented so far:
 	etalib:floor(Prices,Options).
 	etalib:ht_dcperiod(Prices,Options).
 	etalib:ht_dcphase(Prices,Options).
+
+
+TODO:
+
+Credits
+License
+More Indicators
+Documentation
+Unit Tests
