@@ -19,7 +19,15 @@
     exp/2,
     floor/2,
     ht_dcperiod/2,
-    ht_dcphase/2
+    ht_dcphase/2,
+    ht_trendline/2,
+    ht_ln/2,
+    ht_log10/2,
+    kama/2,
+    linearreg/2,
+    linearreg_angle/2,
+    linearreg_intercept/2,
+    linearreg_slope/2
 ]).
 
 -define(NOT_LOADED, not_loaded(?LINE)).
@@ -162,6 +170,68 @@ ht_dcphase(Data, Options) ->
             IOData
     end.
 
+ht_trendline(Data, Options) ->
+    case nif_ht_trendline(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+
+ht_ln(Data, Options) ->
+    case nif_ht_ln(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+
+ht_log10(Data, Options) ->
+    case nif_ht_log10(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+kama(Data, Options) ->
+    case nif_kama(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+linearreg(Data, Options) ->
+    case nif_linearreg(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+linearreg_angle(Data, Options) ->
+    case nif_linearreg_angle(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+linearreg_intercept(Data, Options) ->
+    case nif_linearreg_intercept(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+
+linearreg_slope(Data, Options) ->
+    case nif_linearreg_slope(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+
+
+
 init() ->
     PrivDir = case code:priv_dir(?MODULE) of
         {error, _} ->
@@ -226,5 +296,29 @@ nif_ht_dcperiod(_Data, _Options) ->
     ?NOT_LOADED.
 
 nif_ht_dcphase(_Data, _Options) ->
+    ?NOT_LOADED.
+
+nif_ht_trendline(_Data, _Options) ->
+    ?NOT_LOADED.
+
+nif_ht_ln(_Data, _Options) ->
+    ?NOT_LOADED.
+
+nif_ht_log10(_Data, _Options) ->
+    ?NOT_LOADED.
+
+nif_kama(_Data, _Options) ->
+    ?NOT_LOADED.
+
+nif_linearreg(_Data, _Options) ->
+    ?NOT_LOADED.
+
+nif_linearreg_angle(_Data, _Options) ->
+    ?NOT_LOADED.
+
+nif_linearreg_intercept(_Data, _Options) ->
+    ?NOT_LOADED.
+
+nif_linearreg_slope(_Data, _Options) ->
     ?NOT_LOADED.
 

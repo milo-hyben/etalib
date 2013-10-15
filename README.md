@@ -29,12 +29,20 @@ Implemented so far:
 	etalib:floor(Prices,Options).
 	etalib:ht_dcperiod(Prices,Options).
 	etalib:ht_dcphase(Prices,Options).
+	etalib:ht_trendline(Prices,Options).
+	etalib:ht_ln(Prices,Options).
+	etalib:ht_log10(Prices,Options).
+	etalib:kama(Prices,Options).
+	etalib:linearreg(Prices,Options).
+	etalib:linearreg_angle(Prices,Options).
+	etalib:linearreg_intercept(Prices,Options).
+	etalib:linearreg_slope(Prices,Options).
 
 
 TODO:
 
-Credits
-License
-More Indicators
-Documentation
-Unit Tests
+	Credits
+	License
+	More Indicators
+	Documentation
+	Unit Tests

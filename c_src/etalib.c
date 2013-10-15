@@ -57,7 +57,15 @@ static ErlNifFunc funcs[] =
     {"nif_exp", 2, ta_exp},
     {"nif_floor", 2, ta_floor},
     {"nif_ht_dcperiod", 2, ta_ht_dcperiod},
-    {"nif_ht_dcphase", 2, ta_ht_dcphase}
+    {"nif_ht_dcphase", 2, ta_ht_dcphase},
+    {"nif_ht_trendline",2, ta_ht_trendline}, 
+    {"nif_ht_ln",2, ta_ht_ln}, 
+    {"nif_ht_log10",2, ta_ht_log10}, 
+    {"nif_kama",2, ta_kama}, 
+    {"nif_linearreg",2, ta_linearreg}, 
+    {"nif_linearreg_angle",2, ta_linearreg_angle}, 
+    {"nif_linearreg_intercept",2, ta_linearreg_intercept}, 
+    {"nif_linearreg_slope" ,2, ta_linearreg_slope} 
 };
 
 ERL_NIF_INIT(etalib, funcs, &load, &reload, &upgrade, &unload);
