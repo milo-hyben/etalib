@@ -8,7 +8,7 @@ typedef TA_RetCode (*TA_Function01)(int, int, const double[], int, int*, int*, d
 typedef TA_RetCode (*TA_Function02)(int, int, const double[], int*, int*, double[]);  // TA-Lib functions
 
 ERL_NIF_TERM
-eta_generate_results(EtaStruct* e, TA_RetCode retCode)
+eta_generate_results(EtaStruct* e, TA_RetCode retCode, double* outputValues)
 {
     // check for sucess
     if( retCode != TA_SUCCESS )
@@ -20,7 +20,7 @@ eta_generate_results(EtaStruct* e, TA_RetCode retCode)
     }    
 
     // generate the output structure
-    return enif_make_tuple2(e->env, e->atoms->atom_ok, eta_populate_output(e));
+    return enif_make_tuple2(e->env, e->atoms->atom_ok, eta_populate_output_double(e, 0, outputValues));
 }
 
 ERL_NIF_TERM
@@ -35,24 +35,43 @@ call_function_with_one_invalue_and_timeperiod(ErlNifEnv* env, int argc, const ER
     EtaStruct* e = &eta;
 
     // initialise the EtaStruct, extract the inValues
-    eta_init(e, env, argv);
+    if(eta_init(e, env, argv)!=1)
+    {// inparam values are incorrect
+        // clean up
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
     
     // extract option values
     e->optInTimePeriod = (int)extract_option(env, argv[1], "timeperiod", 2);
+    
+    ERL_NIF_TERM priceType = extract_atom_option(env, argv[1], e->atoms->atom_close); // by default work on close
+
+    double* inValues = assign_array(e, priceType);
+
+    if(inValues==NULL)
+    {// inparam values are incorrect
+        // clean up
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+
+    e->outDblValues1 = (double*) enif_alloc((e->inLen) * sizeof(double));
+    e->outTerms = (ERL_NIF_TERM*) enif_alloc((e->inLen) * sizeof(ERL_NIF_TERM));
    
     // call TA-Lib function
     TA_RetCode retCode = func( 
         e->startIdx,
         e->endIdx,
-        &e->inValues[0],
+        &inValues[0],
         e->optInTimePeriod, 
         &e->outBegIdx,
         &e->outNBElement,
-        &e->outValues[0]
+        &e->outDblValues1[0]
     );
 
     // generate results
-    ERL_NIF_TERM results = eta_generate_results(e, retCode);
+    ERL_NIF_TERM results = eta_generate_results(e, retCode, e->outDblValues1);
 
     // clean up
     eta_destroy(e);
@@ -73,20 +92,40 @@ call_function_with_one_invalue(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv
     EtaStruct* e = &eta;
 
     // initialise the EtaStruct, extract the inValues
-    eta_init(e, env, argv);
+    if(eta_init(e, env, argv)!=1)
+    {// inparam values are incorrect
+        // clean up
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+    
+    // extract option values
+    ERL_NIF_TERM priceType = extract_atom_option(env, argv[1], e->atoms->atom_close); // by default work on close
+
+    double* inValues = assign_array(e, priceType);
+
+    if(inValues==NULL)
+    {// inparam values are incorrect
+        // clean up
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+
+    e->outDblValues1 = (double*) enif_alloc((e->inLen) * sizeof(double));
+    e->outTerms = (ERL_NIF_TERM*) enif_alloc((e->inLen) * sizeof(ERL_NIF_TERM));
    
     // call TA-Lib function
     TA_RetCode retCode = func( 
         e->startIdx,
         e->endIdx,
-        &e->inValues[0],
+        &inValues[0],
         &e->outBegIdx,
         &e->outNBElement,
-        &e->outValues[0]
+        &e->outDblValues1[0]
     );
 
     // generate results
-    ERL_NIF_TERM results = eta_generate_results(e, retCode);
+    ERL_NIF_TERM results = eta_generate_results(e, retCode, e->outDblValues1);
 
     // clean up
     eta_destroy(e);
@@ -94,6 +133,68 @@ call_function_with_one_invalue(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv
     // return the results;
     return results;    
 }
+
+
+ERL_NIF_TERM
+ta_var(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // check if valid arguments
+    if(has_bad_arguments(env, argc, argv))
+        return enif_make_badarg(env);
+
+    // declare the variables
+    EtaStruct eta;
+    EtaStruct* e = &eta;
+
+
+    // initialise the EtaStruct, extract the inValues
+    if(eta_init(e, env, argv)!=1)
+    {// inparam values are incorrect
+        // clean up
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+    
+    // extract option values
+    e->optInTimePeriod = (int)extract_option(env, argv[1], "timeperiod", 2);
+    double optInNbDev = extract_option(env, argv[1], "nbdev", 2);
+
+    ERL_NIF_TERM priceType = extract_atom_option(env, argv[1], e->atoms->atom_close); // by default work on close
+
+    double* inValues = assign_array(e, priceType);
+
+    if(inValues==NULL)
+    {// inparam values are incorrect
+        // clean up
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+
+    e->outDblValues1 = (double*) enif_alloc((e->inLen) * sizeof(double));
+    e->outTerms = (ERL_NIF_TERM*) enif_alloc((e->inLen) * sizeof(ERL_NIF_TERM));
+   
+    // call TA-Lib function
+    TA_RetCode retCode = TA_VAR( 
+        e->startIdx,
+        e->endIdx,
+        &inValues[0],
+        e->optInTimePeriod, 
+        optInNbDev,
+        &e->outBegIdx,
+        &e->outNBElement,
+        &e->outDblValues1[0]
+    );
+
+    // generate results
+    ERL_NIF_TERM results = eta_generate_results(e, retCode, e->outDblValues1);
+
+    // clean up
+    eta_destroy(e);
+
+    // return the results;
+    return results;   
+}
+
 
 ERL_NIF_TERM
 ta_sma(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
@@ -274,44 +375,129 @@ ta_linearreg_slope(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
     return call_function_with_one_invalue_and_timeperiod(env, argc, argv, &TA_LINEARREG_SLOPE);
 }
 
+ERL_NIF_TERM
+ta_max(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_one_invalue_and_timeperiod(env, argc, argv, &TA_MAX);
+}
 
 ERL_NIF_TERM
-ta_var(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+ta_min(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 {
-    // check if valid arguments
-    if(has_bad_arguments(env, argc, argv))
-        return enif_make_badarg(env);
-
-    // declare the variables
-    EtaStruct eta;
-    EtaStruct* e = &eta;
-
-    // initialise the EtaStruct, extract the inValues
-    eta_init(e, env, argv);
-    
-    // extract option values
-    e->optInTimePeriod = (int)extract_option(env, argv[1], "timeperiod", 2);
-
-    double optInNbDev = extract_option(env, argv[1], "nbdev", 2);
-   
-    // call TA-Lib function
-    TA_RetCode retCode = TA_VAR( 
-        e->startIdx,
-        e->endIdx,
-        &e->inValues[0],
-        e->optInTimePeriod, 
-        optInNbDev,
-        &e->outBegIdx,
-        &e->outNBElement,
-        &e->outValues[0]
-    );
-
-    // generate results
-    ERL_NIF_TERM results = eta_generate_results(e, retCode);
-
-    // clean up
-    eta_destroy(e);
-
-    // return the results;
-    return results;
+    // call TA-Lib Function
+    return call_function_with_one_invalue_and_timeperiod(env, argc, argv, &TA_MIN);
 }
+
+ERL_NIF_TERM
+ta_midpoint(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_one_invalue_and_timeperiod(env, argc, argv, &TA_MIDPOINT);
+}
+
+ERL_NIF_TERM
+ta_mom(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_one_invalue_and_timeperiod(env, argc, argv, &TA_MOM);
+}
+
+ERL_NIF_TERM
+ta_roc(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_one_invalue_and_timeperiod(env, argc, argv, &TA_ROC);
+}
+
+ERL_NIF_TERM
+ta_rocp(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_one_invalue_and_timeperiod(env, argc, argv, &TA_ROCP);
+}
+
+ERL_NIF_TERM
+ta_rocr(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_one_invalue_and_timeperiod(env, argc, argv, &TA_ROCR);
+}
+
+ERL_NIF_TERM
+ta_rocr100(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_one_invalue_and_timeperiod(env, argc, argv, &TA_ROCR100);
+}
+
+ERL_NIF_TERM
+ta_tema(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_one_invalue_and_timeperiod(env, argc, argv, &TA_TEMA);
+}
+
+ERL_NIF_TERM
+ta_trima(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_one_invalue_and_timeperiod(env, argc, argv, &TA_TRIMA);
+}
+
+ERL_NIF_TERM
+ta_trix(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_one_invalue_and_timeperiod(env, argc, argv, &TA_TRIX);
+}
+
+ERL_NIF_TERM
+ta_tsf(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_one_invalue_and_timeperiod(env, argc, argv, &TA_TSF);
+}
+
+ERL_NIF_TERM
+ta_sum(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_one_invalue_and_timeperiod(env, argc, argv, &TA_SUM);
+}
+
+ERL_NIF_TERM
+ta_sin(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_one_invalue(env, argc, argv, &TA_SIN);
+}
+
+ERL_NIF_TERM
+ta_sinh(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_one_invalue(env, argc, argv, &TA_SINH);
+}
+
+ERL_NIF_TERM
+ta_sqrt(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_one_invalue(env, argc, argv, &TA_SQRT);
+}
+
+ERL_NIF_TERM
+ta_tan(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_one_invalue(env, argc, argv, &TA_TAN);
+}
+
+ERL_NIF_TERM
+ta_tanh(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_one_invalue(env, argc, argv, &TA_TANH);
+}
+

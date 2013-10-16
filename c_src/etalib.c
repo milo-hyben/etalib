@@ -11,9 +11,14 @@ load(ErlNifEnv* env, void** priv, ERL_NIF_TERM info)
         return 1;
     }
 
-    st->atom_nan = make_atom(env, "nan");
-    st->atom_ok = make_atom(env, "ok");
-    st->atom_error = make_atom(env, "error");
+    st->atom_nan    = make_atom(env, "nan");
+    st->atom_ok     = make_atom(env, "ok");
+    st->atom_error  = make_atom(env, "error");
+    st->atom_open   = make_atom(env, "open");
+    st->atom_high   = make_atom(env, "high");
+    st->atom_low    = make_atom(env, "low");
+    st->atom_close  = make_atom(env, "close");
+    st->atom_volume = make_atom(env, "volume");
 
     *priv = (void*) st;
 
@@ -65,7 +70,26 @@ static ErlNifFunc funcs[] =
     {"nif_linearreg",2, ta_linearreg}, 
     {"nif_linearreg_angle",2, ta_linearreg_angle}, 
     {"nif_linearreg_intercept",2, ta_linearreg_intercept}, 
-    {"nif_linearreg_slope" ,2, ta_linearreg_slope} 
+    {"nif_linearreg_slope" ,2, ta_linearreg_slope}, 
+    {"nif_max" ,2, ta_max},
+    {"nif_min" ,2, ta_min},
+    {"nif_midpoint" ,2, ta_midpoint},
+    {"nif_mom" ,2, ta_mom},
+    {"nif_roc" ,2, ta_roc},
+    {"nif_rocp" ,2, ta_rocp},
+    {"nif_rocr" ,2, ta_rocr},
+    {"nif_rocr100" ,2, ta_rocr100},
+    {"nif_tema" ,2, ta_tema},
+    {"nif_trima" ,2, ta_trima},
+    {"nif_trix" ,2, ta_trix},
+    {"nif_tsf" ,2, ta_tsf},
+    {"nif_sum" ,2, ta_sum},
+    {"nif_sin" ,2, ta_sin},
+    {"nif_sinh" ,2, ta_sinh},
+    {"nif_sqrt" ,2, ta_sqrt},
+    {"nif_tan" ,2, ta_tan},
+    {"nif_tanh" ,2, ta_tanh}
+
 };
 
 ERL_NIF_INIT(etalib, funcs, &load, &reload, &upgrade, &unload);

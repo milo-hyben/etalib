@@ -7,8 +7,8 @@ Work in progress ...
 
 Examples:
 
-	Prices = [10,11,10,12,15,10,11,10,12,15,10,11,10,12,15,12,15].
-	Options = [{timeperiod,2}].
+	Prices = [{close, [10,11,10,12,15,10,11,10,12,15,10,11,10,12,15,12,15]}].
+	Options = [close, {timeperiod,2}].
 
 Implemented so far:
 
@@ -37,7 +37,24 @@ Implemented so far:
 	etalib:linearreg_angle(Prices,Options).
 	etalib:linearreg_intercept(Prices,Options).
 	etalib:linearreg_slope(Prices,Options).
-
+	etalib:max(Prices,Options).
+	etalib:min(Prices,Options).
+	etalib:midpoint(Prices,Options).
+	etalib:mom(Prices,Options).
+	etalib:roc(Prices,Options).
+	etalib:rocp(Prices,Options).
+	etalib:rocr(Prices,Options).
+	etalib:rocr100(Prices,Options).
+	etalib:tema(Prices,Options).
+	etalib:trima(Prices,Options).
+	etalib:trix(Prices,Options).
+	etalib:tsf(Prices,Options).
+	etalib:sum(Prices,Options).
+	etalib:sin(Prices,Options).
+	etalib:sinh(Prices,Options).
+	etalib:sqrt(Prices,Options).
+	etalib:tan(Prices,Options).
+	etalib:tanh(Prices,Options).
 
 TODO:
 
