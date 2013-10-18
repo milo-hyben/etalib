@@ -45,8 +45,87 @@
     sinh/2,
     sqrt/2,
     tan/2,
-    tanh/2
+    tanh/2,
+    adx/2,
+    adxr/2,
+    atr/2,
+    cci/2,
+    dx/2,
+    minus_di/2,
+    natr/2,
+    plus_di/2,
+    willr/2,
+    cdl2crows/2,
+    cdl3blackcrows/2,
+    cdl3inside/2,
+    cdl3linestrike/2,
+    cdl3outside/2,
+    cdl3starsinsouth/2,
+    cdl3whitesoldiers/2,
+    cdladvanceblock/2,
+    cdlbelthold/2,
+    cdlbreakaway/2,
+    cdlclosingmarubozu/2,
+    cdlconcealbabyswall/2,
+    cdlcounterattack/2,
+    cdldoji/2,
+    cdldojistar/2,
+    cdldragonflydoji/2,
+    cdlengulfing/2,
+    cdlgapsidesidewhite/2,
+    cdlgravestonedoji/2,
+    cdlhammer/2,
+    cdlhangingman/2,
+    cdlharami/2,
+    cdlharamicross/2,
+    cdlhighwave/2,
+    cdlhikkake/2,
+    cdlhikkakemod/2,
+    cdlhomingpigeon/2,
+    cdlidentical3crows/2,
+    cdlinneck/2,
+    cdlinvertedhammer/2,
+    cdlkicking/2,
+    cdlkickingbylength/2,
+    cdlladderbottom/2,
+    cdllongleggeddoji/2,
+    cdllongline/2,
+    cdlmarubozu/2,
+    cdlmatchinglow/2,
+    cdlonneck/2,
+    cdlpiercing/2,
+    cdlrickshawman/2,
+    cdlrisefall3methods/2,
+    cdlseparatinglines/2,
+    cdlshootingstar/2,
+    cdlshortline/2,
+    cdlspinningtop/2,
+    cdlstalledpattern/2,
+    cdlsticksandwich/2,
+    cdltakuri/2,
+    cdltasukigap/2,
+    cdlthrusting/2,
+    cdltristar/2,
+    cdlunique3river/2,
+    cdlupsidegap2crows/2,
+    cdlxsidegap3methods/2,
+    cdlabandonedbaby/2,
+    cdldarkcloudcover/2,
+    cdleveningdojistar/2,
+    cdleveningstar/2,
+    cdlmathold/2,
+    cdlmorningdojistar/2,
+    cdlmorningstar/2,
+    bop/2,
+    avgprice/2,
+    ad/2,
 
+    aroonosc/2,
+    beta/2,
+    correl/2,
+    minus_dm/2,
+    plus_dm/2,
+    midprice/2
 ]).
 
 -define(NOT_LOADED, not_loaded(?LINE)).
@@ -355,6 +434,562 @@ tanh(Data, Options) ->
             IOData
     end.
 
+adx(Data, Options) ->
+    case nif_adx(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+adxr(Data, Options) ->
+    case nif_adxr(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+atr(Data, Options) ->
+    case nif_atr(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cci(Data, Options) ->
+    case nif_cci(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+dx(Data, Options) ->
+    case nif_dx(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+minus_di(Data, Options) ->
+    case nif_minus_di(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+natr(Data, Options) ->
+    case nif_natr(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+plus_di(Data, Options) ->
+    case nif_plus_di(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+willr(Data, Options) ->
+    case nif_willr(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdl2crows(Data, Options)  ->
+    case nif_cdl2crows(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdl3blackcrows(Data, Options)  ->
+    case nif_cdl3blackcrows(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdl3inside(Data, Options)  ->
+    case nif_cdl3inside(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdl3linestrike(Data, Options)  ->
+    case nif_cdl3linestrike(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdl3outside(Data, Options)  ->
+    case nif_cdl3outside(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdl3starsinsouth(Data, Options)  ->
+    case nif_cdl3starsinsouth(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdl3whitesoldiers(Data, Options)  ->
+    case nif_cdl3whitesoldiers(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdladvanceblock(Data, Options)  ->
+    case nif_cdladvanceblock(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlbelthold(Data, Options)  ->
+    case nif_cdlbelthold(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlbreakaway(Data, Options)  ->
+    case nif_cdlbreakaway(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlclosingmarubozu(Data, Options)  ->
+    case nif_cdlclosingmarubozu(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlconcealbabyswall(Data, Options)  ->
+    case nif_cdlconcealbabyswall(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlcounterattack(Data, Options)  ->
+    case nif_cdlcounterattack(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdldoji(Data, Options)  ->
+    case nif_cdldoji(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdldojistar(Data, Options)  ->
+    case nif_cdldojistar(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdldragonflydoji(Data, Options)  ->
+    case nif_cdldragonflydoji(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlengulfing(Data, Options)  ->
+    case nif_cdlengulfing(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlgapsidesidewhite(Data, Options)  ->
+    case nif_cdlgapsidesidewhite(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlgravestonedoji(Data, Options)  ->
+    case nif_cdlgravestonedoji(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlhammer(Data, Options)  ->
+    case nif_cdlhammer(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlhangingman(Data, Options)  ->
+    case nif_cdlhangingman(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlharami(Data, Options)  ->
+    case nif_cdlharami(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlharamicross(Data, Options)  ->
+    case nif_cdlharamicross(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlhighwave(Data, Options)  ->
+    case nif_cdlhighwave(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlhikkake(Data, Options)  ->
+    case nif_cdlhikkake(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlhikkakemod(Data, Options)  ->
+    case nif_cdlhikkakemod(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlhomingpigeon(Data, Options)  ->
+    case nif_cdlhomingpigeon(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlidentical3crows(Data, Options)  ->
+    case nif_cdlidentical3crows(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlinneck(Data, Options)  ->
+    case nif_cdlinneck(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlinvertedhammer(Data, Options)  ->
+    case nif_cdlinvertedhammer(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlkicking(Data, Options)  ->
+    case nif_cdlkicking(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlkickingbylength(Data, Options)  ->
+    case nif_cdlkickingbylength(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlladderbottom(Data, Options)  ->
+    case nif_cdlladderbottom(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdllongleggeddoji(Data, Options)  ->
+    case nif_cdllongleggeddoji(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdllongline(Data, Options)  ->
+    case nif_cdllongline(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlmarubozu(Data, Options)  ->
+    case nif_cdlmarubozu(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlmatchinglow(Data, Options)  ->
+    case nif_cdlmatchinglow(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlonneck(Data, Options)  ->
+    case nif_cdlonneck(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlpiercing(Data, Options)  ->
+    case nif_cdlpiercing(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlrickshawman(Data, Options)  ->
+    case nif_cdlrickshawman(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlrisefall3methods(Data, Options)  ->
+    case nif_cdlrisefall3methods(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlseparatinglines(Data, Options)  ->
+    case nif_cdlseparatinglines(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlshootingstar(Data, Options)  ->
+    case nif_cdlshootingstar(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlshortline(Data, Options)  ->
+    case nif_cdlshortline(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlspinningtop(Data, Options)  ->
+    case nif_cdlspinningtop(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlstalledpattern(Data, Options)  ->
+    case nif_cdlstalledpattern(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlsticksandwich(Data, Options)  ->
+    case nif_cdlsticksandwich(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdltakuri(Data, Options)  ->
+    case nif_cdltakuri(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdltasukigap(Data, Options)  ->
+    case nif_cdltasukigap(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlthrusting(Data, Options)  ->
+    case nif_cdlthrusting(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdltristar(Data, Options)  ->
+    case nif_cdltristar(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlunique3river(Data, Options)  ->
+    case nif_cdlunique3river(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlupsidegap2crows(Data, Options)  ->
+    case nif_cdlupsidegap2crows(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlxsidegap3methods(Data, Options)  ->
+    case nif_cdlxsidegap3methods(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+
+cdlabandonedbaby(Data, Options)  ->
+    case nif_cdlabandonedbaby(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdldarkcloudcover(Data, Options)  ->
+    case nif_cdldarkcloudcover(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdleveningdojistar(Data, Options)  ->
+    case nif_cdleveningdojistar(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdleveningstar(Data, Options)  ->
+    case nif_cdleveningstar(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlmathold(Data, Options)  ->
+    case nif_cdlmathold(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlmorningdojistar(Data, Options)  ->
+    case nif_cdlmorningdojistar(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+cdlmorningstar(Data, Options)  ->
+    case nif_cdlmorningstar(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+bop(Data, Options)  ->
+    case nif_bop(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+avgprice(Data, Options)  ->
+    case nif_avgprice(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+ad(Data, Options)  ->
+    case nif_ad(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+aroonosc(Data, Options)  ->
+    case nif_aroonosc(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+beta(Data, Options)  ->
+    case nif_beta(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+correl(Data, Options)  ->
+    case nif_correl(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+minus_dm(Data, Options)  ->
+    case nif_minus_dm(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+plus_dm(Data, Options)  ->
+    case nif_plus_dm(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+midprice(Data, Options)  ->
+    case nif_midprice(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+
+
 init() ->
     PrivDir = case code:priv_dir(?MODULE) of
         {error, _} ->
@@ -455,4 +1090,162 @@ nif_sqrt(_Data, _Options) ->
 nif_tan(_Data, _Options) ->
     ?NOT_LOADED.
 nif_tanh(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_adx(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_adxr(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_atr(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cci(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_dx(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_minus_di(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_natr(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_plus_di(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_willr(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdl2crows(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdl3blackcrows(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdl3inside(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdl3linestrike(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdl3outside(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdl3starsinsouth(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdl3whitesoldiers(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdladvanceblock(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlbelthold(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlbreakaway(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlclosingmarubozu(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlconcealbabyswall(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlcounterattack(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdldoji(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdldojistar(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdldragonflydoji(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlengulfing(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlgapsidesidewhite(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlgravestonedoji(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlhammer(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlhangingman(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlharami(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlharamicross(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlhighwave(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlhikkake(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlhikkakemod(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlhomingpigeon(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlidentical3crows(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlinneck(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlinvertedhammer(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlkicking(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlkickingbylength(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlladderbottom(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdllongleggeddoji(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdllongline(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlmarubozu(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlmatchinglow(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlonneck(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlpiercing(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlrickshawman(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlrisefall3methods(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlseparatinglines(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlshootingstar(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlshortline(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlspinningtop(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlstalledpattern(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlsticksandwich(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdltakuri(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdltasukigap(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlthrusting(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdltristar(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlunique3river(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlupsidegap2crows(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlxsidegap3methods(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlabandonedbaby(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdldarkcloudcover(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdleveningdojistar(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdleveningstar(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlmathold(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlmorningdojistar(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_cdlmorningstar(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_bop(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_avgprice(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_ad(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_aroonosc(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_beta(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_correl(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_minus_dm(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_plus_dm(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_midprice(_Data, _Options) ->
     ?NOT_LOADED.

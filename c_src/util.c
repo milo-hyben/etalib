@@ -206,6 +206,51 @@ extract_atom_option(ErlNifEnv* env, ERL_NIF_TERM opts, ERL_NIF_TERM defValue)
     return res;
 }
 
+ERL_NIF_TERM 
+extract_atom_option_by_name(ErlNifEnv* env, ERL_NIF_TERM opts, const char* name, ERL_NIF_TERM defValue)
+{
+    ERL_NIF_TERM res = defValue;
+    int arity;
+    unsigned len;
+    const ERL_NIF_TERM* array;
+    ERL_NIF_TERM atom_name = make_atom(env, name);
+    ERL_NIF_TERM val;
+
+    while(enif_get_list_cell(env, opts, &val, &opts)) {
+        if(!enif_is_tuple(env, val))
+            continue;
+
+        if(!enif_get_tuple(env, val, &arity, &array))
+            continue;
+
+        if(arity!=2)
+            continue;
+
+        if(enif_compare(atom_name, array[0]) != 0)
+            continue;
+
+        if(!enif_is_atom(env, array[1]))
+            continue;
+
+        if(!enif_get_atom_length(env, array[1], &len, ERL_NIF_LATIN1))
+            continue;
+
+        // init array
+        char* buf =  (char*) enif_alloc(len * sizeof(char));
+        if(!enif_get_atom(env, array[1], buf, len, ERL_NIF_LATIN1))
+        {
+            enif_free(buf);
+            continue;            
+        }
+
+        res = make_atom(env, buf);
+        enif_free(buf);
+        return res;
+    }
+
+    return res;
+}
+
 int
 eta_init(EtaStruct* e, ErlNifEnv* env, const ERL_NIF_TERM argv[])
 {
@@ -216,10 +261,13 @@ eta_init(EtaStruct* e, ErlNifEnv* env, const ERL_NIF_TERM argv[])
     e->inLow = NULL;
     e->inClose = NULL;
     e->inVolume = NULL;
+    
+    e->inValues0 = NULL;
+    e->inValues1 = NULL;
 
+    e->outDblValues0 = NULL;
     e->outDblValues1 = NULL;
     e->outDblValues2 = NULL;
-    e->outDblValues3 = NULL;
     e->outIntValues = NULL;
 
     e->outTerms = NULL;
@@ -229,6 +277,7 @@ eta_init(EtaStruct* e, ErlNifEnv* env, const ERL_NIF_TERM argv[])
     e->optInTimePeriod = 0;
     e->outBegIdx = 0;
     e->outNBElement = 0;
+    e->optInDouble = 0;
 
     return init_input_arrays(env, argv[0], e);
 }
@@ -261,6 +310,11 @@ eta_destroy(EtaStruct* e)
         e->inVolume = NULL;
     }
 
+    if(e->outDblValues0 != NULL) {
+        enif_free(e->outDblValues0);
+        e->outDblValues0 = NULL;
+    }
+
     if(e->outDblValues1 != NULL) {
         enif_free(e->outDblValues1);
         e->outDblValues1 = NULL;
@@ -269,11 +323,6 @@ eta_destroy(EtaStruct* e)
     if(e->outDblValues2 != NULL) {
         enif_free(e->outDblValues2);
         e->outDblValues2 = NULL;
-    }
-
-    if(e->outDblValues3 != NULL) {
-        enif_free(e->outDblValues3);
-        e->outDblValues3 = NULL;
     }
 
     if(e->outIntValues != NULL) {
@@ -311,7 +360,7 @@ eta_populate_output_int(EtaStruct* e, int initPos, const int* outIntValues)
             e->outTerms[i] = e->atoms->atom_nan;
         }
         else {
-            e->outTerms[i] = enif_make_double(e->env, outIntValues[i - e->outBegIdx]);
+            e->outTerms[i] = enif_make_int(e->env, outIntValues[i - e->outBegIdx]);
         }
     }
     return enif_make_list_from_array(e->env, e->outTerms, e->inLen);
