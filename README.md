@@ -165,6 +165,7 @@ Implemented so far:
 	etalib:bbands(Prices,Options).
 	etalib:macd(Prices,Options).
 	etalib:macdfix(Prices,Options).
+	etalib:macdext(Prices,Options).
 
 TODO:
 
