@@ -54,7 +54,6 @@ int     init_input_arrays(ErlNifEnv* env, ERL_NIF_TERM opts, EtaStruct* e);
 double  extract_option(ErlNifEnv* env, ERL_NIF_TERM opts, const char* name, double defValue);
 double* assign_array(EtaStruct* e, ERL_NIF_TERM priceType);
 
-
 ERL_NIF_TERM eta_generate_results_double(EtaStruct* e, TA_RetCode retCode, double* outputValues);
 ERL_NIF_TERM eta_generate_results_int(EtaStruct* e, TA_RetCode retCode, int* outputValues);
 
@@ -101,5 +100,6 @@ ERL_NIF_TERM call_function_with_four_in_arrays_and_one_argument(ErlNifEnv* env, 
 ERL_NIF_TERM call_function_with_four_in_arrays_out_double(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]
 		, TA_FNC_4_IN_ARRAYS_OUT_DOUBLE func);
 
+int extract_ma_type_option(ErlNifEnv* env, EtaStruct* e, ERL_NIF_TERM opts, const char* name, int defValue);
 
 #endif // Included ETALIB_H

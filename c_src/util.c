@@ -975,3 +975,62 @@ call_function_with_four_in_arrays_out_double(
     // return the results;
     return results;    
 }
+
+
+int 
+extract_ma_type_option(ErlNifEnv* env, EtaStruct* e, ERL_NIF_TERM opts, const char* name, int defValue)
+{
+    int res = defValue;
+    int arity;
+    const ERL_NIF_TERM* array;
+    ERL_NIF_TERM atom_name = make_atom(env, name);
+
+    ERL_NIF_TERM val;
+
+    while(enif_get_list_cell(env, opts, &val, &opts)) {
+        if(!enif_is_tuple(env, val))
+            continue;
+
+        if(!enif_get_tuple(env, val, &arity, &array))
+            continue;
+
+        if(arity!=2)
+            continue;
+
+        if(enif_compare(atom_name, array[0]) != 0)
+            continue;
+
+        if(!enif_is_atom(env, array[1]))
+            continue;            
+
+        if(enif_compare(array[1], e->atoms->atom_sma) == 0)
+            return 0;
+
+        if(enif_compare(array[1], e->atoms->atom_ema) == 0)
+            return 1;
+
+        if(enif_compare(array[1], e->atoms->atom_wma) == 0)
+            return 2;
+
+        if(enif_compare(array[1], e->atoms->atom_dema) == 0)
+            return 3;
+
+        if(enif_compare(array[1], e->atoms->atom_tema) == 0)
+            return 4;
+
+        if(enif_compare(array[1], e->atoms->atom_trima) == 0)
+            return 5;
+
+        if(enif_compare(array[1], e->atoms->atom_kama) == 0)
+            return 6;
+
+        if(enif_compare(array[1], e->atoms->atom_mama) == 0)
+            return 7;
+
+        if(enif_compare(array[1], e->atoms->atom_t3) == 0)
+            return 8;
+
+    }
+
+    return res;
+}

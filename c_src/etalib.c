@@ -21,6 +21,15 @@ load(ErlNifEnv* env, void** priv, ERL_NIF_TERM info)
     st->atom_low    = make_atom(env, "low");
     st->atom_close  = make_atom(env, "close");
     st->atom_volume = make_atom(env, "volume");
+    st->atom_sma    = make_atom(env, "sma");
+    st->atom_ema    = make_atom(env, "ema");
+    st->atom_wma    = make_atom(env, "wma");
+    st->atom_dema   = make_atom(env, "dema");
+    st->atom_tema   = make_atom(env, "tema");
+    st->atom_trima  = make_atom(env, "trima");
+    st->atom_kama   = make_atom(env, "kama");
+    st->atom_mama   = make_atom(env, "mama");
+    st->atom_t3     = make_atom(env, "t3");
 
     *priv = (void*) st;
 
@@ -188,7 +197,8 @@ static ErlNifFunc funcs[] =
     {"nif_stddev" ,2, ta_stddev},
     {"nif_sar" ,2, ta_sar},
     {"nif_sarext" ,2, ta_sarext},
-    {"nif_adosc" ,2, ta_adosc}
+    {"nif_adosc" ,2, ta_adosc},
+    {"nif_ma" ,2, ta_ma}
 };
 
 ERL_NIF_INIT(etalib, funcs, &load, &reload, &upgrade, &unload);

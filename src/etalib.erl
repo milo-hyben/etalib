@@ -143,7 +143,8 @@
     stddev/2,
     sar/2,
     sarext/2,
-    adosc/2
+    adosc/2,
+    ma/2
 ]).
 
 -define(NOT_LOADED, not_loaded(?LINE)).
@@ -1139,6 +1140,13 @@ adosc(Data, Options)  ->
         IOData ->
             IOData
     end. 
+ma(Data, Options)  ->
+    case nif_ma(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end. 
 
 init() ->
     PrivDir = case code:priv_dir(?MODULE) of
@@ -1436,4 +1444,6 @@ nif_sar(_Data, _Options) ->
 nif_sarext(_Data, _Options) ->
     ?NOT_LOADED.
 nif_adosc(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_ma(_Data, _Options) ->
     ?NOT_LOADED.
