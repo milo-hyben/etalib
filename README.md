@@ -16,7 +16,7 @@ Examples:
 	]
 
 	Options = [close, {timeperiod,5}, {penetration, 0.5}, {factor, 0.2}].
-	OptionsTimePeriods = [{timeperiod1, 2}, {timeperiod2, 4}, {timeperiod3, 6}].
+	OptionsTimePeriods = [{timeperiod1, 2}, {timeperiod2, 4}, {timeperiod3, 6}, {slow_period, 10}, {fast_period, 3}].
 
 Implemented so far:
 
@@ -163,6 +163,8 @@ Implemented so far:
 	etalib:sar(Prices,Options).
 	etalib:sarext(Prices,Options).
 
+	etalib:adosc(Prices,OptionsTimePeriods).
+	
 TODO:
 
 	Credits
