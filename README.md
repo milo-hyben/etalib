@@ -163,6 +163,7 @@ Implemented so far:
 	etalib:adosc(Prices,OptionsTimePeriods).
 	etalib:ma(Prices,Options).
 	etalib:bbands(Prices,Options).
+	etalib:macd(Prices,Options).
 
 TODO:
 
