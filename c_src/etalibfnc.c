@@ -978,3 +978,42 @@ ta_minindex(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
     // call TA-Lib Function
     return call_function_with_one_in_array_and_one_argument_int_out(env, argc, argv, "timeperiod", &TA_MININDEX);
 }
+
+ERL_NIF_TERM
+ta_t3(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // declare the variables
+    EtaStruct eta;
+    EtaStruct* e = &eta;
+
+    if(init_function_input_params(env, argc, argv, e)==1)
+    {// something wrong with input arguments, clean up and return bad argument error
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+    
+    // extract option values
+    e->optInTimePeriod = (int)extract_option(env, argv[1], "timeperiod", 2);
+    double optInVFactor = extract_option(env, argv[1], "factor", 2);
+   
+    // call TA-Lib function
+    TA_RetCode retCode = TA_T3( 
+        e->startIdx,
+        e->endIdx,
+        e->inValues0,
+        e->optInTimePeriod, 
+        optInVFactor,
+        &e->outBegIdx,
+        &e->outNBElement,
+        &e->outDblValues0[0]
+    );
+
+    // generate results
+    ERL_NIF_TERM results = eta_generate_results_double(e, retCode, e->outDblValues0);
+
+    // clean up
+    eta_destroy(e);
+
+    // return the results;
+    return results;   
+}

@@ -180,8 +180,8 @@ static ErlNifFunc funcs[] =
     {"nif_typprice" ,2, ta_typprice},
     {"nif_wclprice" ,2, ta_wclprice},
     {"nif_maxindex" ,2, ta_maxindex},
-    {"nif_minindex" ,2, ta_minindex}
-
+    {"nif_minindex" ,2, ta_minindex},
+    {"nif_t3" ,2, ta_t3}
 };
 
 ERL_NIF_INIT(etalib, funcs, &load, &reload, &upgrade, &unload);

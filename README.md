@@ -15,7 +15,7 @@ Examples:
 		{volume, [ 27209900, 27118600, 17809700, 27715100, 25141500, 27604400, 28132900, 18310700, 16763000, 25704300, 27174300, 31645300, 26280900, 26181500, 30305000, 21871300, 22723600, 22406900, 24896000, 27997900, 33024100, 25466800, 42970800, 22852700, 20227100, 43494500, 64489900, 47812400, 25214100, 31438600, 38446600, 46661000, 31916600]}
 	]
 
-	Options = [close, {timeperiod,5}, {penetration, 0.5}].
+	Options = [close, {timeperiod,5}, {penetration, 0.5}, {factor, 0.2}].
 
 Implemented so far:
 
@@ -152,6 +152,7 @@ Implemented so far:
 	etalib:wclprice(Prices,Options).
 	etalib:maxindex(Prices,Options).
 	etalib:minindex(Prices,Options).
+	etalib:t3(Prices,Options).
 
 TODO:
 
