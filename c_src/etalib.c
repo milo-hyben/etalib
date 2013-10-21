@@ -198,7 +198,8 @@ static ErlNifFunc funcs[] =
     {"nif_sar" ,2, ta_sar},
     {"nif_sarext" ,2, ta_sarext},
     {"nif_adosc" ,2, ta_adosc},
-    {"nif_ma" ,2, ta_ma}
+    {"nif_ma" ,2, ta_ma},
+    {"nif_bbands" ,2, ta_bbands}
 };
 
 ERL_NIF_INIT(etalib, funcs, &load, &reload, &upgrade, &unload);

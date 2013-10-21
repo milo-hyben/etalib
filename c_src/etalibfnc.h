@@ -148,6 +148,7 @@ ERL_NIF_TERM ta_sar(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
 ERL_NIF_TERM ta_sarext(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
 ERL_NIF_TERM ta_adosc(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
 ERL_NIF_TERM ta_ma(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
+ERL_NIF_TERM ta_bbands(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
 
 
 #endif // Included ETALIBFNC_H

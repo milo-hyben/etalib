@@ -367,7 +367,6 @@ eta_populate_output_int(EtaStruct* e, int initPos, const int* outIntValues)
     return enif_make_list_from_array(e->env, e->outTerms, e->inLen);
 }
 
-
 double* 
 assign_array(EtaStruct* e, ERL_NIF_TERM priceType)
 {
@@ -428,6 +427,57 @@ eta_generate_results_int(
     return enif_make_tuple2(e->env, e->atoms->atom_ok, eta_populate_output_int(e, 0, outputValues));
 }
 
+ERL_NIF_TERM 
+eta_generate_results_three(
+    EtaStruct* e
+    , TA_RetCode retCode
+    , const char* name0
+    , const char* name1
+    , const char* name2)
+{
+    // check for sucess
+    if( retCode != TA_SUCCESS )
+    {
+        // generate error message
+        TA_RetCodeInfo info;
+        TA_SetRetCodeInfo( retCode, &info );
+        return enif_make_tuple2(e->env, e->atoms->atom_error, enif_make_string(e->env, info.infoStr, ERL_NIF_LATIN1));
+    }    
+
+    // generate the output structure
+    ERL_NIF_TERM results[3];
+
+    results[0] = enif_make_tuple2(e->env, make_atom(e->env, name0), eta_populate_output_double(e, 0, e->outDblValues0));
+    results[1] = enif_make_tuple2(e->env, make_atom(e->env, name1), eta_populate_output_double(e, 0, e->outDblValues1));
+    results[2] = enif_make_tuple2(e->env, make_atom(e->env, name2), eta_populate_output_double(e, 0, e->outDblValues2));
+
+    return enif_make_list_from_array(e->env, results, 3);
+}
+
+ERL_NIF_TERM 
+eta_generate_results_two(
+    EtaStruct* e
+    , TA_RetCode retCode
+    , const char* name0
+    , const char* name1)
+{
+    // check for sucess
+    if( retCode != TA_SUCCESS )
+    {
+        // generate error message
+        TA_RetCodeInfo info;
+        TA_SetRetCodeInfo( retCode, &info );
+        return enif_make_tuple2(e->env, e->atoms->atom_error, enif_make_string(e->env, info.infoStr, ERL_NIF_LATIN1));
+    }    
+
+    // generate the output structure
+    ERL_NIF_TERM results[2];
+
+    results[0] = enif_make_tuple2(e->env, make_atom(e->env, name0), eta_populate_output_double(e, 0, e->outDblValues0));
+    results[1] = enif_make_tuple2(e->env, make_atom(e->env, name1), eta_populate_output_double(e, 0, e->outDblValues1));
+
+    return enif_make_list_from_array(e->env, results, 3);
+}
 
 int 
 init_function_input_params(
@@ -451,6 +501,66 @@ init_function_input_params(
         return 1;
 
     e->outDblValues0 = (double*) enif_alloc((e->inLen) * sizeof(double));
+    e->outTerms = (ERL_NIF_TERM*) enif_alloc((e->inLen) * sizeof(ERL_NIF_TERM));
+
+    return 0;
+}
+
+
+int 
+init_function_input_params_two_out(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , EtaStruct* e)
+{
+    // check if valid arguments
+    if(has_bad_arguments(env, argc, argv))
+        return 1;
+
+    // initialise the EtaStruct, extract the inValues
+    if(eta_init(e, env, argv)!=1)
+        return 1;
+    
+    // extract option values
+    ERL_NIF_TERM priceType = extract_atom_option(env, argv[1], e->atoms->atom_close); // by default work on close
+    e->inValues0 = assign_array(e, priceType);
+    if(e->inValues0==NULL)
+        return 1;
+
+    e->outDblValues0 = (double*) enif_alloc((e->inLen) * sizeof(double));
+    e->outDblValues1 = (double*) enif_alloc((e->inLen) * sizeof(double));
+    
+    e->outTerms = (ERL_NIF_TERM*) enif_alloc((e->inLen) * sizeof(ERL_NIF_TERM));
+
+    return 0;
+}
+
+int 
+init_function_input_params_three_out(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , EtaStruct* e)
+{
+    // check if valid arguments
+    if(has_bad_arguments(env, argc, argv))
+        return 1;
+
+    // initialise the EtaStruct, extract the inValues
+    if(eta_init(e, env, argv)!=1)
+        return 1;
+    
+    // extract option values
+    ERL_NIF_TERM priceType = extract_atom_option(env, argv[1], e->atoms->atom_close); // by default work on close
+    e->inValues0 = assign_array(e, priceType);
+    if(e->inValues0==NULL)
+        return 1;
+
+    e->outDblValues0 = (double*) enif_alloc((e->inLen) * sizeof(double));
+    e->outDblValues1 = (double*) enif_alloc((e->inLen) * sizeof(double));
+    e->outDblValues2 = (double*) enif_alloc((e->inLen) * sizeof(double));
+    
     e->outTerms = (ERL_NIF_TERM*) enif_alloc((e->inLen) * sizeof(ERL_NIF_TERM));
 
     return 0;

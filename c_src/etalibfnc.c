@@ -1352,3 +1352,48 @@ ta_ma(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
     // return the results;
     return results;   
 }
+
+ERL_NIF_TERM
+ta_bbands(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // declare the variables
+    EtaStruct eta;
+    EtaStruct* e = &eta;
+
+    if(init_function_input_params_three_out(env, argc, argv, e)==1)
+    {// something wrong with input arguments, clean up and return bad argument error
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+    
+    // extract option values
+    e->optInTimePeriod = (int)extract_option(env, argv[1], "timeperiod", 2);
+    double optInNbDevUp = extract_option(env, argv[1], "nbdevup", 0);
+    double optInNbDevDn = extract_option(env, argv[1], "nbdevdown", 0);
+    int optInMAType = extract_ma_type_option(env, e, argv[1], "ma_type", 0); // by default SMA
+
+    // call TA-Lib function
+    TA_RetCode retCode = TA_BBANDS( 
+        e->startIdx,
+        e->endIdx,
+        e->inValues0,
+        e->optInTimePeriod, 
+        optInNbDevUp,
+        optInNbDevDn,
+        optInMAType,
+        &e->outBegIdx,
+        &e->outNBElement,
+        &e->outDblValues0[0],
+        &e->outDblValues1[0],
+        &e->outDblValues2[0]
+    );
+
+    // generate results
+    ERL_NIF_TERM results = eta_generate_results_three(e, retCode, "upper_band", "middle_band", "lower_band");
+
+    // clean up
+    eta_destroy(e);
+
+    // return the results;
+    return results;   
+}
