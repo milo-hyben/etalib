@@ -141,6 +141,11 @@ Implemented so far:
 	etalib:minus_dm(Prices,Options).
 	etalib:plus_dm(Prices,Options).
 	etalib:midprice(Prices,Options).
+	etalib:v_mult(Prices,Options).
+	etalib:v_add(Prices,Options).
+	etalib:v_sub(Prices,Options).
+	etalib:v_div(Prices,Options).
+	etalib:obv(Prices,Options).
 
 TODO:
 

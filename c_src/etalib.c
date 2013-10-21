@@ -162,14 +162,18 @@ static ErlNifFunc funcs[] =
     {"nif_bop" ,2, ta_bop},
     {"nif_avgprice" ,2, ta_avgprice},
     {"nif_ad" ,2, ta_ad},
-    
     {"nif_aroonosc" ,2, ta_aroonosc},
     {"nif_beta" ,2, ta_beta},
     {"nif_correl" ,2, ta_correl},
     {"nif_minus_dm" ,2, ta_minus_dm},
     {"nif_plus_dm" ,2, ta_plus_dm},
-    {"nif_midprice" ,2, ta_midprice}
+    {"nif_midprice" ,2, ta_midprice},
 
+    {"nif_mult" ,2, ta_mult},
+    {"nif_add" ,2, ta_add},
+    {"nif_sub" ,2, ta_sub},
+    {"nif_div" ,2, ta_div},
+    {"nif_obv" ,2, ta_obv}
 };
 
 ERL_NIF_INIT(etalib, funcs, &load, &reload, &upgrade, &unload);

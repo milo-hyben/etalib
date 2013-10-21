@@ -119,13 +119,18 @@
     bop/2,
     avgprice/2,
     ad/2,
-
     aroonosc/2,
     beta/2,
     correl/2,
     minus_dm/2,
     plus_dm/2,
-    midprice/2
+    midprice/2,
+
+    v_mult/2,
+    v_add/2,
+    v_sub/2,
+    v_div/2,
+    obv/2
 ]).
 
 -define(NOT_LOADED, not_loaded(?LINE)).
@@ -988,7 +993,41 @@ midprice(Data, Options)  ->
         IOData ->
             IOData
     end.
-
+v_mult(Data, Options)  ->
+    case nif_mult(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+v_add(Data, Options)  ->
+    case nif_add(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+v_sub(Data, Options)  ->
+    case nif_sub(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+v_div(Data, Options)  ->
+    case nif_div(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+obv(Data, Options)  ->
+    case nif_obv(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
 
 init() ->
     PrivDir = case code:priv_dir(?MODULE) of
@@ -1248,4 +1287,14 @@ nif_minus_dm(_Data, _Options) ->
 nif_plus_dm(_Data, _Options) ->
     ?NOT_LOADED.
 nif_midprice(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_mult(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_add(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_sub(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_div(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_obv(_Data, _Options) ->
     ?NOT_LOADED.

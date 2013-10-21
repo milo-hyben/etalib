@@ -114,7 +114,6 @@ ERL_NIF_TERM ta_minus_di(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
 ERL_NIF_TERM ta_natr(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
 ERL_NIF_TERM ta_plus_di(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
 ERL_NIF_TERM ta_willr(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
-
 ERL_NIF_TERM ta_cdl2crows(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
 ERL_NIF_TERM ta_cdl3blackcrows(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
 ERL_NIF_TERM ta_cdl3inside(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
@@ -179,13 +178,18 @@ ERL_NIF_TERM ta_cdlmorningstar(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv
 ERL_NIF_TERM ta_bop(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
 ERL_NIF_TERM ta_avgprice(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
 ERL_NIF_TERM ta_ad(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
-
 ERL_NIF_TERM ta_aroonosc(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
 ERL_NIF_TERM ta_beta(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
 ERL_NIF_TERM ta_correl(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
 ERL_NIF_TERM ta_minus_dm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
 ERL_NIF_TERM ta_plus_dm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
 ERL_NIF_TERM ta_midprice(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
+
+ERL_NIF_TERM ta_mult(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
+ERL_NIF_TERM ta_add(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
+ERL_NIF_TERM ta_sub(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
+ERL_NIF_TERM ta_div(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
+ERL_NIF_TERM ta_obv(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
 
 
 #endif // Included ETALIB_H

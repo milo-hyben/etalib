@@ -10,8 +10,11 @@ typedef TA_RetCode (*TA_FNC_1_IN_ARRAY)(int, int, const double[], int*, int*, do
 // TA-Lib functions with one input array and one indicator specific argument
 typedef TA_RetCode (*TA_FNC_1_IN_ARRAY_1_ARG)(int, int, const double[], int, int*, int*, double[]);  
 
+// TA-Lib functions with two input array only
+typedef TA_RetCode (*TA_FNC_2_IN_ARRAYS)(int, int, const double[], const double[], int*, int*, double[]);  
+
 // TA-Lib functions with two input array and one indicator specific argument
-typedef TA_RetCode (*TA_FNC_2_IN_ARRAY_1_ARG)(int, int, const double[], const double[], int, int*, int*, double[]);  
+typedef TA_RetCode (*TA_FNC_2_IN_ARRAYS_1_ARG)(int, int, const double[], const double[], int, int*, int*, double[]);  
 
 // TA-Lib functions with three input arrays and one indicator specific argument
 typedef TA_RetCode (*TA_FNC_3_IN_ARRAYS_1_ARG)(int, int, const double[], const double[], const double[], int, int*, int*, double[]);
@@ -25,9 +28,11 @@ typedef TA_RetCode (*TA_FNC_4_IN_ARRAYS_1_ARG)(int, int, const double[], const d
 // TA-Lib functions with four input arrays (Open, High, Low, Close), out is double
 typedef TA_RetCode (*TA_FNC_4_IN_ARRAYS_OUT_DOUBLE)(int, int, const double[], const double[], const double[], const double[], int*, int*, double[]);
 
-
 ERL_NIF_TERM
-eta_generate_results_double(EtaStruct* e, TA_RetCode retCode, double* outputValues)
+eta_generate_results_double(
+    EtaStruct* e
+    , TA_RetCode retCode
+    , double* outputValues)
 {
     // check for sucess
     if( retCode != TA_SUCCESS )
@@ -43,7 +48,10 @@ eta_generate_results_double(EtaStruct* e, TA_RetCode retCode, double* outputValu
 }
 
 ERL_NIF_TERM
-eta_generate_results_int(EtaStruct* e, TA_RetCode retCode, int* outputValues)
+eta_generate_results_int(
+    EtaStruct* e
+    , TA_RetCode retCode
+    , int* outputValues)
 {
     // check for sucess
     if( retCode != TA_SUCCESS )
@@ -60,7 +68,11 @@ eta_generate_results_int(EtaStruct* e, TA_RetCode retCode, int* outputValues)
 
 
 int 
-init_function_input_params(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[], EtaStruct* e)
+init_function_input_params(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , EtaStruct* e)
 {
     // check if valid arguments
     if(has_bad_arguments(env, argc, argv))
@@ -84,7 +96,13 @@ init_function_input_params(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[], 
 
 
 int 
-init_function_input_params_two_in_arrays(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[], const char* inArray0, const char* inArray1, EtaStruct* e)
+init_function_input_params_two_in_arrays(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , const char* inArray0
+    , const char* inArray1
+    , EtaStruct* e)
 {
     // check if valid arguments
     if(has_bad_arguments(env, argc, argv))
@@ -115,7 +133,11 @@ init_function_input_params_two_in_arrays(ErlNifEnv* env, int argc, const ERL_NIF
 
 
 int 
-init_function_input_params_with_double_out_array(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[], EtaStruct* e)
+init_function_input_params_with_double_out_array(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , EtaStruct* e)
 {
     // check if valid arguments
     if(has_bad_arguments(env, argc, argv))
@@ -132,7 +154,11 @@ init_function_input_params_with_double_out_array(ErlNifEnv* env, int argc, const
 }
 
 int 
-init_function_input_params_with_int_out_array(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[], EtaStruct* e)
+init_function_input_params_with_int_out_array(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , EtaStruct* e)
 {
     // check if valid arguments
     if(has_bad_arguments(env, argc, argv))
@@ -149,7 +175,11 @@ init_function_input_params_with_int_out_array(ErlNifEnv* env, int argc, const ER
 }
 
 ERL_NIF_TERM
-call_function_with_one_in_array(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[], TA_FNC_1_IN_ARRAY func)
+call_function_with_one_in_array(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , TA_FNC_1_IN_ARRAY func)
 {
     // declare the variables
     EtaStruct eta;
@@ -183,7 +213,12 @@ call_function_with_one_in_array(ErlNifEnv* env, int argc, const ERL_NIF_TERM arg
 
 
 ERL_NIF_TERM
-call_function_with_one_in_array_and_one_argument(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[], const char* argumentName, TA_FNC_1_IN_ARRAY_1_ARG func)
+call_function_with_one_in_array_and_one_argument(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , const char* argumentName
+    , TA_FNC_1_IN_ARRAY_1_ARG func)
 {
     // declare the variables
     EtaStruct eta;
@@ -218,11 +253,55 @@ call_function_with_one_in_array_and_one_argument(ErlNifEnv* env, int argc, const
     return results;    
 }
 
+ERL_NIF_TERM
+call_function_with_two_in_array(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , const char* arrayName0
+    , const char* arrayName1
+    , TA_FNC_2_IN_ARRAYS func)
+{
+    // declare the variables
+    EtaStruct eta;
+    EtaStruct* e = &eta;
+
+    if(init_function_input_params_two_in_arrays(env, argc, argv, arrayName0, arrayName1, e)==1)
+    {// something wrong with input arguments, clean up and return bad argument error
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+
+    // call TA-Lib function
+    TA_RetCode retCode = func( 
+        e->startIdx,
+        e->endIdx,
+        e->inValues0,
+        e->inValues1,
+        &e->outBegIdx,
+        &e->outNBElement,
+        &e->outDblValues0[0]
+    );
+
+    // generate results
+    ERL_NIF_TERM results = eta_generate_results_double(e, retCode, e->outDblValues0);
+
+    // clean up
+    eta_destroy(e);
+
+    // return the results;
+    return results;    
+}
+
 
 ERL_NIF_TERM
-call_function_with_two_in_array_and_one_argument(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]
-    , const char* arrayName0, const char* arrayName1
-    , const char* argumentName, TA_FNC_2_IN_ARRAY_1_ARG func)
+call_function_with_two_in_array_and_one_argument(
+    ErlNifEnv* env, int argc
+    , const ERL_NIF_TERM argv[]
+    , const char* arrayName0
+    , const char* arrayName1
+    , const char* argumentName
+    , TA_FNC_2_IN_ARRAYS_1_ARG func)
 {
     // declare the variables
     EtaStruct eta;
@@ -259,7 +338,12 @@ call_function_with_two_in_array_and_one_argument(ErlNifEnv* env, int argc, const
 }
 
 ERL_NIF_TERM
-call_function_with_three_in_arrays_and_one_argument(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[], const char* argumentName, TA_FNC_3_IN_ARRAYS_1_ARG func)
+call_function_with_three_in_arrays_and_one_argument(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , const char* argumentName
+    , TA_FNC_3_IN_ARRAYS_1_ARG func)
 {
     // declare the variables
     EtaStruct eta;
@@ -297,7 +381,11 @@ call_function_with_three_in_arrays_and_one_argument(ErlNifEnv* env, int argc, co
 }
 
 ERL_NIF_TERM
-call_function_with_four_in_arrays(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[], TA_FNC_4_IN_ARRAYS func)
+call_function_with_four_in_arrays(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , TA_FNC_4_IN_ARRAYS func)
 {
     // declare the variables
     EtaStruct eta;
@@ -334,7 +422,12 @@ call_function_with_four_in_arrays(ErlNifEnv* env, int argc, const ERL_NIF_TERM a
 
 
 ERL_NIF_TERM
-call_function_with_four_in_arrays_and_one_argument(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[], const char* argumentName, TA_FNC_4_IN_ARRAYS_1_ARG func)
+call_function_with_four_in_arrays_and_one_argument(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , const char* argumentName
+    , TA_FNC_4_IN_ARRAYS_1_ARG func)
 {
     // declare the variables
     EtaStruct eta;
@@ -373,7 +466,11 @@ call_function_with_four_in_arrays_and_one_argument(ErlNifEnv* env, int argc, con
 }
 
 ERL_NIF_TERM
-call_function_with_four_in_arrays_out_double(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[], TA_FNC_4_IN_ARRAYS_OUT_DOUBLE func)
+call_function_with_four_in_arrays_out_double(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , TA_FNC_4_IN_ARRAYS_OUT_DOUBLE func)
 {
     // declare the variables
     EtaStruct eta;
@@ -1304,4 +1401,39 @@ ta_midprice(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 {
     // call TA-Lib Function
     return call_function_with_two_in_array_and_one_argument(env, argc, argv, "high", "low", "timeperiod", &TA_MIDPRICE);
+}
+
+ERL_NIF_TERM
+ta_mult(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_two_in_array(env, argc, argv, "high", "low", &TA_MULT);
+}
+
+ERL_NIF_TERM
+ta_add(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_two_in_array(env, argc, argv, "high", "low", &TA_ADD);
+}
+
+ERL_NIF_TERM
+ta_sub(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_two_in_array(env, argc, argv, "high", "low", &TA_SUB);
+}
+
+ERL_NIF_TERM
+ta_div(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_two_in_array(env, argc, argv, "high", "low", &TA_DIV);
+}
+
+ERL_NIF_TERM
+ta_obv(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_two_in_array(env, argc, argv, "close", "volume", &TA_OBV);
 }
