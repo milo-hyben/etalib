@@ -2,6 +2,7 @@
 // See the LICENSE file for more information.
 
 #include "etalib.h"
+#include "util.h"
 #include <assert.h>
 #include <stdbool.h>
 
@@ -388,3 +389,480 @@ assign_array(EtaStruct* e, ERL_NIF_TERM priceType)
     return NULL;
 }
 
+
+ERL_NIF_TERM
+eta_generate_results_double(
+    EtaStruct* e
+    , TA_RetCode retCode
+    , double* outputValues)
+{
+    // check for sucess
+    if( retCode != TA_SUCCESS )
+    {
+        // generate error message
+        TA_RetCodeInfo info;
+        TA_SetRetCodeInfo( retCode, &info );
+        return enif_make_tuple2(e->env, e->atoms->atom_error, enif_make_string(e->env, info.infoStr, ERL_NIF_LATIN1));
+    }    
+
+    // generate the output structure
+    return enif_make_tuple2(e->env, e->atoms->atom_ok, eta_populate_output_double(e, 0, outputValues));
+}
+
+ERL_NIF_TERM
+eta_generate_results_int(
+    EtaStruct* e
+    , TA_RetCode retCode
+    , int* outputValues)
+{
+    // check for sucess
+    if( retCode != TA_SUCCESS )
+    {
+        // generate error message
+        TA_RetCodeInfo info;
+        TA_SetRetCodeInfo( retCode, &info );
+        return enif_make_tuple2(e->env, e->atoms->atom_error, enif_make_string(e->env, info.infoStr, ERL_NIF_LATIN1));
+    }    
+
+    // generate the output structure
+    return enif_make_tuple2(e->env, e->atoms->atom_ok, eta_populate_output_int(e, 0, outputValues));
+}
+
+
+int 
+init_function_input_params(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , EtaStruct* e)
+{
+    // check if valid arguments
+    if(has_bad_arguments(env, argc, argv))
+        return 1;
+
+    // initialise the EtaStruct, extract the inValues
+    if(eta_init(e, env, argv)!=1)
+        return 1;
+    
+    // extract option values
+    ERL_NIF_TERM priceType = extract_atom_option(env, argv[1], e->atoms->atom_close); // by default work on close
+    e->inValues0 = assign_array(e, priceType);
+    if(e->inValues0==NULL)
+        return 1;
+
+    e->outDblValues0 = (double*) enif_alloc((e->inLen) * sizeof(double));
+    e->outTerms = (ERL_NIF_TERM*) enif_alloc((e->inLen) * sizeof(ERL_NIF_TERM));
+
+    return 0;
+}
+
+
+int 
+init_function_input_params_two_in_arrays(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , const char* inArray0
+    , const char* inArray1
+    , EtaStruct* e)
+{
+    // check if valid arguments
+    if(has_bad_arguments(env, argc, argv))
+        return 1;
+
+    // initialise the EtaStruct, extract the inValues
+    if(eta_init(e, env, argv)!=1)
+        return 1;
+    
+    // extract option values
+    ERL_NIF_TERM priceType0 = extract_atom_option_by_name(env, argv[1], inArray0, e->atoms->atom_high); // by default work on High
+
+    e->inValues0 = assign_array(e, priceType0);
+    if(e->inValues0==NULL)
+        return 1;
+
+    ERL_NIF_TERM priceType1 = extract_atom_option_by_name(env, argv[1], inArray1, e->atoms->atom_low); // by default work on Low
+
+    e->inValues1 = assign_array(e, priceType1);
+    if(e->inValues1==NULL)
+        return 1;
+
+    e->outDblValues0 = (double*) enif_alloc((e->inLen) * sizeof(double));
+    e->outTerms = (ERL_NIF_TERM*) enif_alloc((e->inLen) * sizeof(ERL_NIF_TERM));
+
+    return 0;
+}
+
+
+int 
+init_function_input_params_with_double_out_array(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , EtaStruct* e)
+{
+    // check if valid arguments
+    if(has_bad_arguments(env, argc, argv))
+        return 1;
+
+    // initialise the EtaStruct, extract the inValues
+    if(eta_init(e, env, argv)!=1)
+        return 1;
+    
+    e->outDblValues0 = (double*) enif_alloc((e->inLen) * sizeof(double));
+    e->outTerms = (ERL_NIF_TERM*) enif_alloc((e->inLen) * sizeof(ERL_NIF_TERM));
+
+    return 0;
+}
+
+int 
+init_function_input_params_with_int_out_array(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , EtaStruct* e)
+{
+    // check if valid arguments
+    if(has_bad_arguments(env, argc, argv))
+        return 1;
+
+    // initialise the EtaStruct, extract the inValues
+    if(eta_init(e, env, argv)!=1)
+        return 1;
+    
+    e->outIntValues = (int*) enif_alloc((e->inLen) * sizeof(double));
+    e->outTerms = (ERL_NIF_TERM*) enif_alloc((e->inLen) * sizeof(ERL_NIF_TERM));
+
+    return 0;
+}
+
+ERL_NIF_TERM
+call_function_with_one_in_array(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , TA_FNC_1_IN_ARRAY func)
+{
+    // declare the variables
+    EtaStruct eta;
+    EtaStruct* e = &eta;
+
+    if(init_function_input_params(env, argc, argv, e)==1)
+    {// something wrong with input arguments, clean up and return bad argument error
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+   
+    // call TA-Lib function
+    TA_RetCode retCode = func( 
+        e->startIdx,
+        e->endIdx,
+        e->inValues0,
+        &e->outBegIdx,
+        &e->outNBElement,
+        &e->outDblValues0[0]
+    );
+
+    // generate results
+    ERL_NIF_TERM results = eta_generate_results_double(e, retCode, e->outDblValues0);
+
+    // clean up
+    eta_destroy(e);
+
+    // return the results;
+    return results;    
+}
+
+
+ERL_NIF_TERM
+call_function_with_one_in_array_and_one_argument(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , const char* argumentName
+    , TA_FNC_1_IN_ARRAY_1_ARG func)
+{
+    // declare the variables
+    EtaStruct eta;
+    EtaStruct* e = &eta;
+
+    if(init_function_input_params(env, argc, argv, e)==1)
+    {// something wrong with input arguments, clean up and return bad argument error
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+
+    e->optInTimePeriod = (int)extract_option(env, argv[1], argumentName, 2);
+       
+    // call TA-Lib function
+    TA_RetCode retCode = func( 
+        e->startIdx,
+        e->endIdx,
+        e->inValues0,
+        e->optInTimePeriod, 
+        &e->outBegIdx,
+        &e->outNBElement,
+        &e->outDblValues0[0]
+    );
+
+    // generate results
+    ERL_NIF_TERM results = eta_generate_results_double(e, retCode, e->outDblValues0);
+
+    // clean up
+    eta_destroy(e);
+
+    // return the results;
+    return results;    
+}
+
+ERL_NIF_TERM
+call_function_with_two_in_array(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , const char* arrayName0
+    , const char* arrayName1
+    , TA_FNC_2_IN_ARRAYS func)
+{
+    // declare the variables
+    EtaStruct eta;
+    EtaStruct* e = &eta;
+
+    if(init_function_input_params_two_in_arrays(env, argc, argv, arrayName0, arrayName1, e)==1)
+    {// something wrong with input arguments, clean up and return bad argument error
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+
+    // call TA-Lib function
+    TA_RetCode retCode = func( 
+        e->startIdx,
+        e->endIdx,
+        e->inValues0,
+        e->inValues1,
+        &e->outBegIdx,
+        &e->outNBElement,
+        &e->outDblValues0[0]
+    );
+
+    // generate results
+    ERL_NIF_TERM results = eta_generate_results_double(e, retCode, e->outDblValues0);
+
+    // clean up
+    eta_destroy(e);
+
+    // return the results;
+    return results;    
+}
+
+
+ERL_NIF_TERM
+call_function_with_two_in_array_and_one_argument(
+    ErlNifEnv* env, int argc
+    , const ERL_NIF_TERM argv[]
+    , const char* arrayName0
+    , const char* arrayName1
+    , const char* argumentName
+    , TA_FNC_2_IN_ARRAYS_1_ARG func)
+{
+    // declare the variables
+    EtaStruct eta;
+    EtaStruct* e = &eta;
+
+    if(init_function_input_params_two_in_arrays(env, argc, argv, arrayName0, arrayName1, e)==1)
+    {// something wrong with input arguments, clean up and return bad argument error
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+
+    e->optInTimePeriod = (int)extract_option(env, argv[1], argumentName, 2);
+       
+    // call TA-Lib function
+    TA_RetCode retCode = func( 
+        e->startIdx,
+        e->endIdx,
+        e->inValues0,
+        e->inValues1,
+        e->optInTimePeriod, 
+        &e->outBegIdx,
+        &e->outNBElement,
+        &e->outDblValues0[0]
+    );
+
+    // generate results
+    ERL_NIF_TERM results = eta_generate_results_double(e, retCode, e->outDblValues0);
+
+    // clean up
+    eta_destroy(e);
+
+    // return the results;
+    return results;    
+}
+
+ERL_NIF_TERM
+call_function_with_three_in_arrays_and_one_argument(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , const char* argumentName
+    , TA_FNC_3_IN_ARRAYS_1_ARG func)
+{
+    // declare the variables
+    EtaStruct eta;
+    EtaStruct* e = &eta;
+
+    if(init_function_input_params_with_double_out_array(env, argc, argv, e)==1)
+    {// something wrong with input arguments, clean up and return bad argument error
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+
+    e->optInTimePeriod = (int)extract_option(env, argv[1], argumentName, 2);
+       
+    // call TA-Lib function
+    TA_RetCode retCode = func( 
+        e->startIdx,
+        e->endIdx,
+        e->inHigh,
+        e->inLow,
+        e->inClose,
+        e->optInTimePeriod, 
+        &e->outBegIdx,
+        &e->outNBElement,
+        &e->outDblValues0[0]
+    );
+
+    // generate results
+    ERL_NIF_TERM results = eta_generate_results_double(e, retCode, e->outDblValues0);
+
+    // clean up
+    eta_destroy(e);
+
+    // return the results;
+    return results;    
+}
+
+ERL_NIF_TERM
+call_function_with_four_in_arrays(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , TA_FNC_4_IN_ARRAYS func)
+{
+    // declare the variables
+    EtaStruct eta;
+    EtaStruct* e = &eta;
+
+    if(init_function_input_params_with_int_out_array(env, argc, argv, e)==1)
+    {// something wrong with input arguments, clean up and return bad argument error
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+   
+    // call TA-Lib function
+    TA_RetCode retCode = func( 
+        e->startIdx,
+        e->endIdx,
+        e->inOpen,
+        e->inHigh,
+        e->inLow,
+        e->inClose,
+        &e->outBegIdx,
+        &e->outNBElement,
+        &e->outIntValues[0]
+    );
+
+    // generate results
+    ERL_NIF_TERM results = eta_generate_results_int(e, retCode, e->outIntValues);
+
+    // clean up
+    eta_destroy(e);
+
+    // return the results;
+    return results;    
+}
+
+
+ERL_NIF_TERM
+call_function_with_four_in_arrays_and_one_argument(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , const char* argumentName
+    , TA_FNC_4_IN_ARRAYS_1_ARG func)
+{
+    // declare the variables
+    EtaStruct eta;
+    EtaStruct* e = &eta;
+
+    if(init_function_input_params_with_int_out_array(env, argc, argv, e)==1)
+    {// something wrong with input arguments, clean up and return bad argument error
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+
+    e->optInDouble = extract_option(env, argv[1], argumentName, 0);
+       
+    // call TA-Lib function
+    TA_RetCode retCode = func( 
+        e->startIdx,
+        e->endIdx,
+        e->inOpen,
+        e->inHigh,
+        e->inLow,
+        e->inClose,
+        e->optInDouble, 
+        &e->outBegIdx,
+        &e->outNBElement,
+        &e->outIntValues[0]
+    );
+
+    // generate results
+    ERL_NIF_TERM results = eta_generate_results_int(e, retCode, e->outIntValues);
+
+    // clean up
+    eta_destroy(e);
+
+    // return the results;
+    return results;    
+}
+
+ERL_NIF_TERM
+call_function_with_four_in_arrays_out_double(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , TA_FNC_4_IN_ARRAYS_OUT_DOUBLE func)
+{
+    // declare the variables
+    EtaStruct eta;
+    EtaStruct* e = &eta;
+
+    if(init_function_input_params_with_double_out_array(env, argc, argv, e)==1)
+    {// something wrong with input arguments, clean up and return bad argument error
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+   
+    // call TA-Lib function
+    TA_RetCode retCode = func( 
+        e->startIdx,
+        e->endIdx,
+        e->inOpen,
+        e->inHigh,
+        e->inLow,
+        e->inClose,
+        &e->outBegIdx,
+        &e->outNBElement,
+        &e->outDblValues0[0]
+    );
+
+    // generate results
+    ERL_NIF_TERM results = eta_generate_results_double(e, retCode, e->outDblValues0);
+
+    // clean up
+    eta_destroy(e);
+
+    // return the results;
+    return results;    
+}

@@ -2,6 +2,8 @@
 // See the LICENSE file for more information.
 
 #include "etalib.h"
+#include "etalibfnc.h"
+#include "util.h"
 
 static int
 load(ErlNifEnv* env, void** priv, ERL_NIF_TERM info)
