@@ -148,7 +148,8 @@
     bbands/2,
     macd/2,
     macdfix/2,
-    macdext/2
+    macdext/2,
+    minmaxindex/2
 ]).
 
 -define(NOT_LOADED, not_loaded(?LINE)).
@@ -1179,6 +1180,13 @@ macdext(Data, Options)  ->
         IOData ->
             IOData
     end.
+minmaxindex(Data, Options)  ->
+    case nif_minmaxindex(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
 
 init() ->
     PrivDir = case code:priv_dir(?MODULE) of
@@ -1487,3 +1495,5 @@ nif_macdfix(_Data, _Options) ->
     ?NOT_LOADED.
 nif_macdext(_Data, _Options) ->
     ?NOT_LOADED.    
+nif_minmaxindex(_Data, _Options) ->
+    ?NOT_LOADED.

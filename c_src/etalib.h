@@ -47,7 +47,8 @@ typedef struct {
     double*    outDblValues0;
     double*    outDblValues1;
     double*    outDblValues2;
-    int*       outIntValues;
+    int*       outIntValues0;
+    int*       outIntValues1;
    
     unsigned    inLen;
     int         startIdx;

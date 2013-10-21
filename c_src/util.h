@@ -47,6 +47,7 @@ ERL_NIF_TERM eta_generate_results_double(EtaStruct* e, TA_RetCode retCode, doubl
 ERL_NIF_TERM eta_generate_results_int(EtaStruct* e, TA_RetCode retCode, int* outputValues);
 ERL_NIF_TERM eta_generate_results_two(EtaStruct* e, TA_RetCode retCode, const char* name0, const char* name1);
 ERL_NIF_TERM eta_generate_results_three(EtaStruct* e, TA_RetCode retCode, const char* name0, const char* name1, const char* name2);
+ERL_NIF_TERM eta_generate_results_two_int(EtaStruct* e, TA_RetCode retCode, const char* name0, const char* name1);
 
 ERL_NIF_TERM extract_atom_option(ErlNifEnv* env, ERL_NIF_TERM opts, ERL_NIF_TERM defValue);
 ERL_NIF_TERM extract_atom_option_by_name(ErlNifEnv* env, ERL_NIF_TERM opts, const char* name, ERL_NIF_TERM defValue);
@@ -68,6 +69,8 @@ int init_function_input_params_two_out(ErlNifEnv* env, int argc, const ERL_NIF_T
 int init_function_input_params_three_out(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[], EtaStruct* e);
 
 int init_function_input_params_int_out(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[], EtaStruct* e);
+
+int init_function_input_params_two_int_out(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[], EtaStruct* e);
 
 int init_function_input_params_two_in_arrays(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]
 	, const char* inArray0, const char* inArray1, EtaStruct* e);

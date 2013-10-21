@@ -269,7 +269,8 @@ eta_init(EtaStruct* e, ErlNifEnv* env, const ERL_NIF_TERM argv[])
     e->outDblValues0 = NULL;
     e->outDblValues1 = NULL;
     e->outDblValues2 = NULL;
-    e->outIntValues = NULL;
+    e->outIntValues0 = NULL;
+    e->outIntValues1 = NULL;
 
     e->outTerms = NULL;
     e->inLen = 0;
@@ -326,9 +327,14 @@ eta_destroy(EtaStruct* e)
         e->outDblValues2 = NULL;
     }
 
-    if(e->outIntValues != NULL) {
-        enif_free(e->outIntValues);
-        e->outIntValues = NULL;
+    if(e->outIntValues0 != NULL) {
+        enif_free(e->outIntValues0);
+        e->outIntValues0 = NULL;
+    }
+
+    if(e->outIntValues1 != NULL) {
+        enif_free(e->outIntValues1);
+        e->outIntValues1 = NULL;
     }
 
     if(e->outTerms != NULL) {
@@ -476,7 +482,32 @@ eta_generate_results_two(
     results[0] = enif_make_tuple2(e->env, make_atom(e->env, name0), eta_populate_output_double(e, 0, e->outDblValues0));
     results[1] = enif_make_tuple2(e->env, make_atom(e->env, name1), eta_populate_output_double(e, 0, e->outDblValues1));
 
-    return enif_make_list_from_array(e->env, results, 3);
+    return enif_make_list_from_array(e->env, results, 2);
+}
+
+ERL_NIF_TERM 
+eta_generate_results_two_int(
+    EtaStruct* e
+    , TA_RetCode retCode
+    , const char* name0
+    , const char* name1)
+{
+    // check for sucess
+    if( retCode != TA_SUCCESS )
+    {
+        // generate error message
+        TA_RetCodeInfo info;
+        TA_SetRetCodeInfo( retCode, &info );
+        return enif_make_tuple2(e->env, e->atoms->atom_error, enif_make_string(e->env, info.infoStr, ERL_NIF_LATIN1));
+    }    
+
+    // generate the output structure
+    ERL_NIF_TERM results[2];
+
+    results[0] = enif_make_tuple2(e->env, make_atom(e->env, name0), eta_populate_output_int(e, 0, e->outIntValues0));
+    results[1] = enif_make_tuple2(e->env, make_atom(e->env, name1), eta_populate_output_int(e, 0, e->outIntValues1));
+
+    return enif_make_list_from_array(e->env, results, 2);
 }
 
 int 
@@ -587,7 +618,7 @@ init_function_input_params_int_out(
     if(e->inValues0==NULL)
         return 1;
 
-    e->outIntValues = (int*) enif_alloc((e->inLen) * sizeof(double));
+    e->outIntValues0 = (int*) enif_alloc((e->inLen) * sizeof(double));
     e->outTerms = (ERL_NIF_TERM*) enif_alloc((e->inLen) * sizeof(ERL_NIF_TERM));
 
     return 0;
@@ -666,7 +697,35 @@ init_function_input_params_with_int_out_array(
     if(eta_init(e, env, argv)!=1)
         return 1;
     
-    e->outIntValues = (int*) enif_alloc((e->inLen) * sizeof(double));
+    e->outIntValues0 = (int*) enif_alloc((e->inLen) * sizeof(double));
+    e->outTerms = (ERL_NIF_TERM*) enif_alloc((e->inLen) * sizeof(ERL_NIF_TERM));
+
+    return 0;
+}
+
+int 
+init_function_input_params_two_int_out(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , EtaStruct* e)
+{
+    // check if valid arguments
+    if(has_bad_arguments(env, argc, argv))
+        return 1;
+
+    // initialise the EtaStruct, extract the inValues
+    if(eta_init(e, env, argv)!=1)
+        return 1;
+    
+    // extract option values
+    ERL_NIF_TERM priceType = extract_atom_option(env, argv[1], e->atoms->atom_close); // by default work on close
+    e->inValues0 = assign_array(e, priceType);
+    if(e->inValues0==NULL)
+        return 1;
+
+    e->outIntValues0 = (int*) enif_alloc((e->inLen) * sizeof(double));
+    e->outIntValues1 = (int*) enif_alloc((e->inLen) * sizeof(double));
     e->outTerms = (ERL_NIF_TERM*) enif_alloc((e->inLen) * sizeof(ERL_NIF_TERM));
 
     return 0;
@@ -780,11 +839,11 @@ call_function_with_one_in_array_and_one_argument_int_out(
         e->optInTimePeriod, 
         &e->outBegIdx,
         &e->outNBElement,
-        &e->outIntValues[0]
+        &e->outIntValues0[0]
     );
 
     // generate results
-    ERL_NIF_TERM results = eta_generate_results_int(e, retCode, e->outIntValues);
+    ERL_NIF_TERM results = eta_generate_results_int(e, retCode, e->outIntValues0);
 
     // clean up
     eta_destroy(e);
@@ -988,11 +1047,11 @@ call_function_with_four_in_arrays(
         e->inClose,
         &e->outBegIdx,
         &e->outNBElement,
-        &e->outIntValues[0]
+        &e->outIntValues0[0]
     );
 
     // generate results
-    ERL_NIF_TERM results = eta_generate_results_int(e, retCode, e->outIntValues);
+    ERL_NIF_TERM results = eta_generate_results_int(e, retCode, e->outIntValues0);
 
     // clean up
     eta_destroy(e);
@@ -1033,11 +1092,11 @@ call_function_with_four_in_arrays_and_one_argument(
         e->optInDouble, 
         &e->outBegIdx,
         &e->outNBElement,
-        &e->outIntValues[0]
+        &e->outIntValues0[0]
     );
 
     // generate results
-    ERL_NIF_TERM results = eta_generate_results_int(e, retCode, e->outIntValues);
+    ERL_NIF_TERM results = eta_generate_results_int(e, retCode, e->outIntValues0);
 
     // clean up
     eta_destroy(e);

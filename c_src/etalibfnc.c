@@ -1083,11 +1083,11 @@ ta_ht_trendmode(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
         e->inValues0,
         &e->outBegIdx,
         &e->outNBElement,
-        &e->outIntValues[0]
+        &e->outIntValues0[0]
     );
 
     // generate results
-    ERL_NIF_TERM results = eta_generate_results_int(e, retCode, e->outIntValues);
+    ERL_NIF_TERM results = eta_generate_results_int(e, retCode, e->outIntValues0);
 
     // clean up
     eta_destroy(e);
@@ -1523,6 +1523,45 @@ ta_macdext(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 
     // generate results
     ERL_NIF_TERM results = eta_generate_results_three(e, retCode, "macd", "macd_signal", "macd_hist");
+
+    // clean up
+    eta_destroy(e);
+
+    // return the results;
+    return results;   
+}
+
+
+ERL_NIF_TERM
+ta_minmaxindex(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // declare the variables
+    EtaStruct eta;
+    EtaStruct* e = &eta;
+
+    if(init_function_input_params_two_int_out(env, argc, argv, e)==1)
+    {// something wrong with input arguments, clean up and return bad argument error
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+    
+    // extract option values
+    e->optInTimePeriod = (int)extract_option(env, argv[1], "timeperiod", 2);
+
+    // call TA-Lib function
+    TA_RetCode retCode = TA_MINMAXINDEX( 
+        e->startIdx,
+        e->endIdx,
+        e->inValues0,
+        e->optInTimePeriod, 
+        &e->outBegIdx,
+        &e->outNBElement,
+        &e->outIntValues0[0],
+        &e->outIntValues1[0]
+    );
+
+    // generate results
+    ERL_NIF_TERM results = eta_generate_results_two_int(e, retCode, "min_idx", "max_idx");
 
     // clean up
     eta_destroy(e);

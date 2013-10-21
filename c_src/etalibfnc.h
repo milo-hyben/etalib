@@ -152,5 +152,7 @@ ERL_NIF_TERM ta_bbands(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
 ERL_NIF_TERM ta_macd(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
 ERL_NIF_TERM ta_macdfix(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
 ERL_NIF_TERM ta_macdext(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
+ERL_NIF_TERM ta_minmaxindex(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
+
 
 #endif // Included ETALIBFNC_H
