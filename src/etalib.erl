@@ -130,6 +130,7 @@
     v_sub/2,
     v_div/2,
     obv/2,
+    medprice/2,
     trange/2,
     typprice/2,
     wclprice/2
@@ -1030,6 +1031,13 @@ obv(Data, Options)  ->
         IOData ->
             IOData
     end.
+medprice(Data, Options)  ->
+    case nif_medprice(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
 trange(Data, Options)  ->
     case nif_trange(Data, Options) of
         {error, _} = Error ->
@@ -1320,6 +1328,8 @@ nif_sub(_Data, _Options) ->
 nif_div(_Data, _Options) ->
     ?NOT_LOADED.
 nif_obv(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_medprice(_Data, _Options) ->
     ?NOT_LOADED.
 nif_trange(_Data, _Options) ->
     ?NOT_LOADED.

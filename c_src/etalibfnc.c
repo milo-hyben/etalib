@@ -938,6 +938,13 @@ ta_obv(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 }
 
 ERL_NIF_TERM
+ta_medprice(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_two_in_array(env, argc, argv, "high", "low", &TA_MEDPRICE);
+}
+
+ERL_NIF_TERM
 ta_trange(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 {
     // call TA-Lib Function

@@ -175,6 +175,7 @@ static ErlNifFunc funcs[] =
     {"nif_sub" ,2, ta_sub},
     {"nif_div" ,2, ta_div},
     {"nif_obv" ,2, ta_obv},
+    {"nif_medprice" ,2, ta_medprice},
     {"nif_trange" ,2, ta_trange},
     {"nif_typprice" ,2, ta_typprice},
     {"nif_wclprice" ,2, ta_wclprice}
