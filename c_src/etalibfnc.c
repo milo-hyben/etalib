@@ -44,6 +44,7 @@ ta_var(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
     return results;   
 }
 
+
 ERL_NIF_TERM
 ta_sma(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 {
@@ -1134,4 +1135,43 @@ ta_mfi(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 
     // return the results;
     return results;    
+}
+
+ERL_NIF_TERM
+ta_stddev(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // declare the variables
+    EtaStruct eta;
+    EtaStruct* e = &eta;
+
+    if(init_function_input_params(env, argc, argv, e)==1)
+    {// something wrong with input arguments, clean up and return bad argument error
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+    
+    // extract option values
+    e->optInTimePeriod = (int)extract_option(env, argv[1], "timeperiod", 2);
+    double optInNbDev = extract_option(env, argv[1], "nbdev", 2);
+   
+    // call TA-Lib function
+    TA_RetCode retCode = TA_STDDEV( 
+        e->startIdx,
+        e->endIdx,
+        e->inValues0,
+        e->optInTimePeriod, 
+        optInNbDev,
+        &e->outBegIdx,
+        &e->outNBElement,
+        &e->outDblValues0[0]
+    );
+
+    // generate results
+    ERL_NIF_TERM results = eta_generate_results_double(e, retCode, e->outDblValues0);
+
+    // clean up
+    eta_destroy(e);
+
+    // return the results;
+    return results;   
 }
