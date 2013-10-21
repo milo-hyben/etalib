@@ -16,6 +16,7 @@ Examples:
 	]
 
 	Options = [close, {timeperiod,5}, {penetration, 0.5}, {factor, 0.2}].
+	OptionsTimePeriods = [{timeperiod1, 2}, {timeperiod2, 4}, {timeperiod3, 6}].
 
 Implemented so far:
 
@@ -153,6 +154,7 @@ Implemented so far:
 	etalib:maxindex(Prices,Options).
 	etalib:minindex(Prices,Options).
 	etalib:t3(Prices,Options).
+	etalib:ultosc(Prices,OptionsTimePeriods).
 
 TODO:
 

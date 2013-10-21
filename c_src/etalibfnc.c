@@ -1017,3 +1017,47 @@ ta_t3(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
     // return the results;
     return results;   
 }
+
+
+ERL_NIF_TERM
+ta_ultosc(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // declare the variables
+    EtaStruct eta;
+    EtaStruct* e = &eta;
+
+    if(init_function_input_params_with_double_out_array(env, argc, argv, e)==1)
+    {// something wrong with input arguments, clean up and return bad argument error
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+    
+    // extract option values
+    int optInTimePeriod1 = (int)extract_option(env, argv[1], "timeperiod1", 1); /* From 1 to 100000 */
+    int optInTimePeriod2 = (int)extract_option(env, argv[1], "timeperiod2", 1); /* From 1 to 100000 */
+    int optInTimePeriod3 = (int)extract_option(env, argv[1], "timeperiod3", 1); /* From 1 to 100000 */
+   
+    // call TA-Lib function
+    TA_RetCode retCode = TA_ULTOSC( 
+        e->startIdx,
+        e->endIdx,
+        e->inHigh,
+        e->inLow,
+        e->inClose,
+        optInTimePeriod1, 
+        optInTimePeriod2,
+        optInTimePeriod3,
+        &e->outBegIdx,
+        &e->outNBElement,
+        &e->outDblValues0[0]
+    );
+
+    // generate results
+    ERL_NIF_TERM results = eta_generate_results_double(e, retCode, e->outDblValues0);
+
+    // clean up
+    eta_destroy(e);
+
+    // return the results;
+    return results;   
+}

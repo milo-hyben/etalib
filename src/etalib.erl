@@ -136,7 +136,8 @@
     wclprice/2,
     maxindex/2,
     minindex/2,
-    t3/2
+    t3/2,
+    ultosc/2
 ]).
 
 -define(NOT_LOADED, not_loaded(?LINE)).
@@ -1083,6 +1084,13 @@ t3(Data, Options)  ->
         IOData ->
             IOData
     end.
+ultosc(Data, Options)  ->
+    case nif_ultosc(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
 
 init() ->
     PrivDir = case code:priv_dir(?MODULE) of
@@ -1366,4 +1374,6 @@ nif_maxindex(_Data, _Options) ->
 nif_minindex(_Data, _Options) ->
     ?NOT_LOADED.
 nif_t3(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_ultosc(_Data, _Options) ->
     ?NOT_LOADED.
