@@ -146,7 +146,8 @@
     adosc/2,
     ma/2,
     bbands/2,
-    macd/2
+    macd/2,
+    macdfix/2
 ]).
 
 -define(NOT_LOADED, not_loaded(?LINE)).
@@ -1163,6 +1164,13 @@ macd(Data, Options)  ->
         IOData ->
             IOData
     end.
+macdfix(Data, Options)  ->
+    case nif_macdfix(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
 
 init() ->
     PrivDir = case code:priv_dir(?MODULE) of
@@ -1466,4 +1474,6 @@ nif_ma(_Data, _Options) ->
 nif_bbands(_Data, _Options) ->
     ?NOT_LOADED.
 nif_macd(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_macdfix(_Data, _Options) ->
     ?NOT_LOADED.
