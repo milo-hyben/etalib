@@ -1215,3 +1215,57 @@ ta_sar(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
     // return the results;
     return results;   
 }
+
+
+ERL_NIF_TERM
+ta_sarext(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // declare the variables
+    EtaStruct eta;
+    EtaStruct* e = &eta;
+
+    if(init_function_input_params_with_double_out_array(env, argc, argv, e)==1)
+    {// something wrong with input arguments, clean up and return bad argument error
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+    
+    // extract option values
+    int optInStartValue = (int)extract_option(env, argv[1], "start", 0); /* From TA_REAL_MIN to TA_REAL_MAX */
+    int optInOffsetOnReverse = (int)extract_option(env, argv[1], "offset", 0); /* From 0 to TA_REAL_MAX */
+    int optInAccelerationInitLong = (int)extract_option(env, argv[1], "acc_init_long", 0); /* From 0 to TA_REAL_MAX */
+    int optInAccelerationLong = (int)extract_option(env, argv[1], "acc_long", 0); /* From 0 to TA_REAL_MAX */
+    int optInAccelerationMaxLong = (int)extract_option(env, argv[1], "acc_max_long", 0); /* From 0 to TA_REAL_MAX */
+    int optInAccelerationInitShort = (int)extract_option(env, argv[1], "acc_init_short", 0); /* From 0 to TA_REAL_MAX */
+    int optInAccelerationShort = (int)extract_option(env, argv[1], "acc_short", 0); /* From 0 to TA_REAL_MAX */
+    int optInAccelerationMaxShort = (int)extract_option(env, argv[1], "acc_max_short", 0); /* From 0 to TA_REAL_MAX */
+   
+    // call TA-Lib function
+    TA_RetCode retCode = TA_SAREXT( 
+        e->startIdx,
+        e->endIdx,
+        e->inHigh,
+        e->inLow,
+        optInStartValue, 
+        optInOffsetOnReverse,
+        optInAccelerationInitLong,
+        optInAccelerationLong,
+        optInAccelerationMaxLong,
+        optInAccelerationInitShort,
+        optInAccelerationShort,
+        optInAccelerationMaxShort,
+        &e->outBegIdx,
+        &e->outNBElement,
+        &e->outDblValues0[0]
+    );
+
+    // generate results
+    ERL_NIF_TERM results = eta_generate_results_double(e, retCode, e->outDblValues0);
+
+    // clean up
+    eta_destroy(e);
+
+    // return the results;
+    return results;   
+}
+

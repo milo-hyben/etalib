@@ -145,5 +145,7 @@ ERL_NIF_TERM ta_ht_trendmode(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]
 ERL_NIF_TERM ta_mfi(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
 ERL_NIF_TERM ta_stddev(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
 ERL_NIF_TERM ta_sar(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
+ERL_NIF_TERM ta_sarext(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
+
 
 #endif // Included ETALIBFNC_H

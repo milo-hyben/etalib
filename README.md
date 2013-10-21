@@ -161,6 +161,7 @@ Implemented so far:
 	etalib:mfi(Prices,Options).
 	etalib:stddev(Prices,Options).
 	etalib:sar(Prices,Options).
+	etalib:sarext(Prices,Options).
 
 TODO:
 
