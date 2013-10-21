@@ -936,3 +936,24 @@ ta_obv(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
     // call TA-Lib Function
     return call_function_with_two_in_array(env, argc, argv, "close", "volume", &TA_OBV);
 }
+
+ERL_NIF_TERM
+ta_trange(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_three_in_arrays(env, argc, argv, &TA_TRANGE);
+}
+
+ERL_NIF_TERM
+ta_typprice(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_three_in_arrays(env, argc, argv, &TA_TYPPRICE);
+}
+
+ERL_NIF_TERM
+ta_wclprice(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_three_in_arrays(env, argc, argv, &TA_WCLPRICE);
+}

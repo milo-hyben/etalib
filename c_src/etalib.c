@@ -170,12 +170,14 @@ static ErlNifFunc funcs[] =
     {"nif_minus_dm" ,2, ta_minus_dm},
     {"nif_plus_dm" ,2, ta_plus_dm},
     {"nif_midprice" ,2, ta_midprice},
-
     {"nif_mult" ,2, ta_mult},
     {"nif_add" ,2, ta_add},
     {"nif_sub" ,2, ta_sub},
     {"nif_div" ,2, ta_div},
-    {"nif_obv" ,2, ta_obv}
+    {"nif_obv" ,2, ta_obv},
+    {"nif_trange" ,2, ta_trange},
+    {"nif_typprice" ,2, ta_typprice},
+    {"nif_wclprice" ,2, ta_wclprice}
 };
 
 ERL_NIF_INIT(etalib, funcs, &load, &reload, &upgrade, &unload);

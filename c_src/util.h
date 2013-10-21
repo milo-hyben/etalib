@@ -20,6 +20,9 @@ typedef TA_RetCode (*TA_FNC_2_IN_ARRAYS)(int, int, const double[], const double[
 // TA-Lib functions with two input arrays and one indicator specific argument
 typedef TA_RetCode (*TA_FNC_2_IN_ARRAYS_1_ARG)(int, int, const double[], const double[], int, int*, int*, double[]);  
 
+// TA-Lib functions with three input arrays only
+typedef TA_RetCode (*TA_FNC_3_IN_ARRAYS)(int, int, const double[], const double[], const double[], int*, int*, double[]);
+
 // TA-Lib functions with three input arrays and one indicator specific argument
 typedef TA_RetCode (*TA_FNC_3_IN_ARRAYS_1_ARG)(int, int, const double[], const double[], const double[], int, int*, int*, double[]);
 
@@ -61,23 +64,28 @@ int init_function_input_params_with_double_out_array(ErlNifEnv* env, int argc, c
 
 int  init_function_input_params_with_int_out_array(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[], EtaStruct* e);
 
+// functions with one, two, three, four input arrays, no extra arguments
 ERL_NIF_TERM call_function_with_one_in_array(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]
 		, TA_FNC_1_IN_ARRAY func);
 
-ERL_NIF_TERM call_function_with_one_in_array_and_one_argument(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]
-		, const char* argumentName, TA_FNC_1_IN_ARRAY_1_ARG func);
-
 ERL_NIF_TERM call_function_with_two_in_array(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]
 		, const char* arrayName0, const char* arrayName1, TA_FNC_2_IN_ARRAYS func);
+
+ERL_NIF_TERM call_function_with_three_in_arrays(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]
+		, TA_FNC_3_IN_ARRAYS func);
+
+ERL_NIF_TERM call_function_with_four_in_arrays(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]
+		, TA_FNC_4_IN_ARRAYS func);
+
+// functions with two, three, four input arrays and extra arguments
+ERL_NIF_TERM call_function_with_one_in_array_and_one_argument(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]
+		, const char* argumentName, TA_FNC_1_IN_ARRAY_1_ARG func);
 
 ERL_NIF_TERM call_function_with_two_in_array_and_one_argument(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]
 		, const char* arrayName0, const char* arrayName1, const char* argumentName, TA_FNC_2_IN_ARRAYS_1_ARG func);
 
 ERL_NIF_TERM call_function_with_three_in_arrays_and_one_argument(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]
 		, const char* argumentName, TA_FNC_3_IN_ARRAYS_1_ARG func);
-
-ERL_NIF_TERM call_function_with_four_in_arrays(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]
-		, TA_FNC_4_IN_ARRAYS func);
 
 ERL_NIF_TERM call_function_with_four_in_arrays_and_one_argument(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]
 		, const char* argumentName, TA_FNC_4_IN_ARRAYS_1_ARG func);

@@ -700,6 +700,46 @@ call_function_with_two_in_array_and_one_argument(
 }
 
 ERL_NIF_TERM
+call_function_with_three_in_arrays(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , TA_FNC_3_IN_ARRAYS func)
+{
+    // declare the variables
+    EtaStruct eta;
+    EtaStruct* e = &eta;
+
+    if(init_function_input_params_with_double_out_array(env, argc, argv, e)==1)
+    {// something wrong with input arguments, clean up and return bad argument error
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+
+    // call TA-Lib function
+    TA_RetCode retCode = func( 
+        e->startIdx,
+        e->endIdx,
+        e->inHigh,
+        e->inLow,
+        e->inClose,
+        &e->outBegIdx,
+        &e->outNBElement,
+        &e->outDblValues0[0]
+    );
+
+    // generate results
+    ERL_NIF_TERM results = eta_generate_results_double(e, retCode, e->outDblValues0);
+
+    // clean up
+    eta_destroy(e);
+
+    // return the results;
+    return results;    
+}
+
+
+ERL_NIF_TERM
 call_function_with_three_in_arrays_and_one_argument(
     ErlNifEnv* env
     , int argc

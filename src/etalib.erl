@@ -125,12 +125,14 @@
     minus_dm/2,
     plus_dm/2,
     midprice/2,
-
     v_mult/2,
     v_add/2,
     v_sub/2,
     v_div/2,
-    obv/2
+    obv/2,
+    trange/2,
+    typprice/2,
+    wclprice/2
 ]).
 
 -define(NOT_LOADED, not_loaded(?LINE)).
@@ -1028,6 +1030,27 @@ obv(Data, Options)  ->
         IOData ->
             IOData
     end.
+trange(Data, Options)  ->
+    case nif_trange(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+typprice(Data, Options)  ->
+    case nif_typprice(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+wclprice(Data, Options)  ->
+    case nif_wclprice(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
 
 init() ->
     PrivDir = case code:priv_dir(?MODULE) of
@@ -1297,4 +1320,10 @@ nif_sub(_Data, _Options) ->
 nif_div(_Data, _Options) ->
     ?NOT_LOADED.
 nif_obv(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_trange(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_typprice(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_wclprice(_Data, _Options) ->
     ?NOT_LOADED.

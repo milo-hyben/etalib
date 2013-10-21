@@ -146,6 +146,9 @@ Implemented so far:
 	etalib:v_sub(Prices,Options).
 	etalib:v_div(Prices,Options).
 	etalib:obv(Prices,Options).
+	etalib:trange(Prices,Options).
+	etalib:typprice(Prices,Options).
+	etalib:wclprice(Prices,Options).
 
 TODO:
 
