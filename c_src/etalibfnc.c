@@ -1061,3 +1061,38 @@ ta_ultosc(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
     // return the results;
     return results;   
 }
+
+ERL_NIF_TERM
+ta_ht_trendmode(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // declare the variables
+    EtaStruct eta;
+    EtaStruct* e = &eta;
+
+    if(init_function_input_params_int_out(env, argc, argv, e)==1)
+    {// something wrong with input arguments, clean up and return bad argument error
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+
+    // call TA-Lib function
+    TA_RetCode retCode = TA_HT_TRENDMODE( 
+        e->startIdx,
+        e->endIdx,
+        e->inValues0,
+        &e->outBegIdx,
+        &e->outNBElement,
+        &e->outIntValues[0]
+    );
+
+    // generate results
+    ERL_NIF_TERM results = eta_generate_results_int(e, retCode, e->outIntValues);
+
+    // clean up
+    eta_destroy(e);
+
+    // return the results;
+    return results;    
+}
+
+

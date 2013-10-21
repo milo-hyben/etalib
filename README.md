@@ -155,6 +155,7 @@ Implemented so far:
 	etalib:minindex(Prices,Options).
 	etalib:t3(Prices,Options).
 	etalib:ultosc(Prices,OptionsTimePeriods).
+	etalib:ht_trendmode(Prices,Options).
 
 TODO:
 
