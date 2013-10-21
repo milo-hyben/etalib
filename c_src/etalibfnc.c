@@ -1175,3 +1175,43 @@ ta_stddev(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
     // return the results;
     return results;   
 }
+
+ERL_NIF_TERM
+ta_sar(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // declare the variables
+    EtaStruct eta;
+    EtaStruct* e = &eta;
+
+    if(init_function_input_params_with_double_out_array(env, argc, argv, e)==1)
+    {// something wrong with input arguments, clean up and return bad argument error
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+    
+    // extract option values
+    int optInAcceleration = (int)extract_option(env, argv[1], "acceleration", 0); /* From 0 to TA_REAL_MAX */
+    int optInMaximum = (int)extract_option(env, argv[1], "maximum", 0); /* From 0 to TA_REAL_MAX */
+   
+    // call TA-Lib function
+    TA_RetCode retCode = TA_SAR( 
+        e->startIdx,
+        e->endIdx,
+        e->inHigh,
+        e->inLow,
+        optInAcceleration, 
+        optInMaximum,
+        &e->outBegIdx,
+        &e->outNBElement,
+        &e->outDblValues0[0]
+    );
+
+    // generate results
+    ERL_NIF_TERM results = eta_generate_results_double(e, retCode, e->outDblValues0);
+
+    // clean up
+    eta_destroy(e);
+
+    // return the results;
+    return results;   
+}

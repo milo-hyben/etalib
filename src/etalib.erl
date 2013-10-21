@@ -140,7 +140,8 @@
     ultosc/2,
     ht_trendmode/2,
     mfi/2,
-    stddev/2
+    stddev/2,
+    sar/2
 ]).
 
 -define(NOT_LOADED, not_loaded(?LINE)).
@@ -1115,6 +1116,13 @@ stddev(Data, Options)  ->
         IOData ->
             IOData
     end.
+sar(Data, Options)  ->
+    case nif_sar(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
 
 init() ->
     PrivDir = case code:priv_dir(?MODULE) of
@@ -1406,4 +1414,6 @@ nif_ht_trendmode(_Data, _Options) ->
 nif_mfi(_Data, _Options) ->
     ?NOT_LOADED.
 nif_stddev(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_sar(_Data, _Options) ->
     ?NOT_LOADED.

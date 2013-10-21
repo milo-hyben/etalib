@@ -160,6 +160,7 @@ Implemented so far:
 	etalib:ht_trendmode(Prices,Options).
 	etalib:mfi(Prices,Options).
 	etalib:stddev(Prices,Options).
+	etalib:sar(Prices,Options).
 
 TODO:
 
