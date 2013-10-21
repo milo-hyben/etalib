@@ -1096,3 +1096,42 @@ ta_ht_trendmode(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 }
 
 
+ERL_NIF_TERM
+ta_mfi(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // declare the variables
+    EtaStruct eta;
+    EtaStruct* e = &eta;
+
+    if(init_function_input_params_with_double_out_array(env, argc, argv, e)==1)
+    {// something wrong with input arguments, clean up and return bad argument error
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+
+    // extract option values
+    e->optInTimePeriod = (int)extract_option(env, argv[1], "timeperiod", 2);
+   
+    // call TA-Lib function
+    TA_RetCode retCode = TA_MFI( 
+        e->startIdx,
+        e->endIdx,
+        e->inHigh,
+        e->inLow,
+        e->inClose,
+        e->inVolume,
+        e->optInTimePeriod,         
+        &e->outBegIdx,
+        &e->outNBElement,
+        &e->outDblValues0[0]
+    );
+
+    // generate results
+    ERL_NIF_TERM results = eta_generate_results_double(e, retCode, e->outDblValues0);
+
+    // clean up
+    eta_destroy(e);
+
+    // return the results;
+    return results;    
+}

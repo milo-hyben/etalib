@@ -183,8 +183,8 @@ static ErlNifFunc funcs[] =
     {"nif_minindex" ,2, ta_minindex},
     {"nif_t3" ,2, ta_t3},
     {"nif_ultosc" ,2, ta_ultosc},
-    {"nif_ht_trendmode" ,2, ta_ht_trendmode}
-   
+    {"nif_ht_trendmode" ,2, ta_ht_trendmode},
+    {"nif_mfi" ,2, ta_mfi}
 };
 
 ERL_NIF_INIT(etalib, funcs, &load, &reload, &upgrade, &unload);
