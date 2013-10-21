@@ -150,6 +150,8 @@ Implemented so far:
 	etalib:trange(Prices,Options).
 	etalib:typprice(Prices,Options).
 	etalib:wclprice(Prices,Options).
+	etalib:maxindex(Prices,Options).
+	etalib:minindex(Prices,Options).
 
 TODO:
 

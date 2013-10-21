@@ -133,7 +133,9 @@
     medprice/2,
     trange/2,
     typprice/2,
-    wclprice/2
+    wclprice/2,
+    maxindex/2,
+    minindex/2
 ]).
 
 -define(NOT_LOADED, not_loaded(?LINE)).
@@ -1059,6 +1061,20 @@ wclprice(Data, Options)  ->
         IOData ->
             IOData
     end.
+maxindex(Data, Options)  ->
+    case nif_maxindex(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+minindex(Data, Options)  ->
+    case nif_minindex(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
 
 init() ->
     PrivDir = case code:priv_dir(?MODULE) of
@@ -1337,3 +1353,8 @@ nif_typprice(_Data, _Options) ->
     ?NOT_LOADED.
 nif_wclprice(_Data, _Options) ->
     ?NOT_LOADED.
+nif_maxindex(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_minindex(_Data, _Options) ->
+    ?NOT_LOADED.
+

@@ -178,7 +178,10 @@ static ErlNifFunc funcs[] =
     {"nif_medprice" ,2, ta_medprice},
     {"nif_trange" ,2, ta_trange},
     {"nif_typprice" ,2, ta_typprice},
-    {"nif_wclprice" ,2, ta_wclprice}
+    {"nif_wclprice" ,2, ta_wclprice},
+    {"nif_maxindex" ,2, ta_maxindex},
+    {"nif_minindex" ,2, ta_minindex}
+
 };
 
 ERL_NIF_INIT(etalib, funcs, &load, &reload, &upgrade, &unload);

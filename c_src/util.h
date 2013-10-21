@@ -14,6 +14,9 @@ typedef TA_RetCode (*TA_FNC_1_IN_ARRAY)(int, int, const double[], int*, int*, do
 // TA-Lib functions with one input array and one indicator specific argument
 typedef TA_RetCode (*TA_FNC_1_IN_ARRAY_1_ARG)(int, int, const double[], int, int*, int*, double[]);  
 
+// TA-Lib functions with one input array and one indicator specific argument, output array of integers
+typedef TA_RetCode (*TA_FNC_1_IN_ARRAY_1_ARG_INT_OUT)(int, int, const double[], int, int*, int*, int[]);  
+
 // TA-Lib functions with two input arrays only
 typedef TA_RetCode (*TA_FNC_2_IN_ARRAYS)(int, int, const double[], const double[], int*, int*, double[]);  
 
@@ -57,6 +60,8 @@ ERL_NIF_TERM eta_generate_results_int(EtaStruct* e, TA_RetCode retCode, int* out
 
 int init_function_input_params(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[], EtaStruct* e);
 
+int init_function_input_params_int_out(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[], EtaStruct* e);
+
 int init_function_input_params_two_in_arrays(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]
 	, const char* inArray0, const char* inArray1, EtaStruct* e);
 
@@ -80,6 +85,9 @@ ERL_NIF_TERM call_function_with_four_in_arrays(ErlNifEnv* env, int argc, const E
 // functions with two, three, four input arrays and extra arguments
 ERL_NIF_TERM call_function_with_one_in_array_and_one_argument(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]
 		, const char* argumentName, TA_FNC_1_IN_ARRAY_1_ARG func);
+
+ERL_NIF_TERM call_function_with_one_in_array_and_one_argument_int_out(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]
+		, const char* argumentName, TA_FNC_1_IN_ARRAY_1_ARG_INT_OUT func);
 
 ERL_NIF_TERM call_function_with_two_in_array_and_one_argument(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]
 		, const char* arrayName0, const char* arrayName1, const char* argumentName, TA_FNC_2_IN_ARRAYS_1_ARG func);

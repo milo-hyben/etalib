@@ -456,6 +456,32 @@ init_function_input_params(
     return 0;
 }
 
+int 
+init_function_input_params_int_out(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , EtaStruct* e)
+{
+    // check if valid arguments
+    if(has_bad_arguments(env, argc, argv))
+        return 1;
+
+    // initialise the EtaStruct, extract the inValues
+    if(eta_init(e, env, argv)!=1)
+        return 1;
+    
+    // extract option values
+    ERL_NIF_TERM priceType = extract_atom_option(env, argv[1], e->atoms->atom_close); // by default work on close
+    e->inValues0 = assign_array(e, priceType);
+    if(e->inValues0==NULL)
+        return 1;
+
+    e->outIntValues = (int*) enif_alloc((e->inLen) * sizeof(double));
+    e->outTerms = (ERL_NIF_TERM*) enif_alloc((e->inLen) * sizeof(ERL_NIF_TERM));
+
+    return 0;
+}
 
 int 
 init_function_input_params_two_in_arrays(
@@ -614,6 +640,49 @@ call_function_with_one_in_array_and_one_argument(
     // return the results;
     return results;    
 }
+
+
+ERL_NIF_TERM
+call_function_with_one_in_array_and_one_argument_int_out(
+    ErlNifEnv* env
+    , int argc
+    , const ERL_NIF_TERM argv[]
+    , const char* argumentName
+    , TA_FNC_1_IN_ARRAY_1_ARG_INT_OUT func)
+{
+    // declare the variables
+    EtaStruct eta;
+    EtaStruct* e = &eta;
+
+    if(init_function_input_params_int_out(env, argc, argv, e)==1)
+    {// something wrong with input arguments, clean up and return bad argument error
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+
+    e->optInTimePeriod = (int)extract_option(env, argv[1], argumentName, 2);
+       
+    // call TA-Lib function
+    TA_RetCode retCode = func( 
+        e->startIdx,
+        e->endIdx,
+        e->inValues0,
+        e->optInTimePeriod, 
+        &e->outBegIdx,
+        &e->outNBElement,
+        &e->outIntValues[0]
+    );
+
+    // generate results
+    ERL_NIF_TERM results = eta_generate_results_int(e, retCode, e->outIntValues);
+
+    // clean up
+    eta_destroy(e);
+
+    // return the results;
+    return results;    
+}
+
 
 ERL_NIF_TERM
 call_function_with_two_in_array(

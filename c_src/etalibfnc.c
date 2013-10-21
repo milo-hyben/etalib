@@ -964,3 +964,17 @@ ta_wclprice(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
     // call TA-Lib Function
     return call_function_with_three_in_arrays(env, argc, argv, &TA_WCLPRICE);
 }
+
+ERL_NIF_TERM
+ta_maxindex(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_one_in_array_and_one_argument_int_out(env, argc, argv, "timeperiod", &TA_MAXINDEX);
+}
+
+ERL_NIF_TERM
+ta_minindex(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // call TA-Lib Function
+    return call_function_with_one_in_array_and_one_argument_int_out(env, argc, argv, "timeperiod", &TA_MININDEX);
+}

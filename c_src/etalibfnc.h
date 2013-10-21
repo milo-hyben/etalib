@@ -137,5 +137,7 @@ ERL_NIF_TERM ta_medprice(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
 ERL_NIF_TERM ta_trange(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
 ERL_NIF_TERM ta_typprice(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
 ERL_NIF_TERM ta_wclprice(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
+ERL_NIF_TERM ta_maxindex(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
+ERL_NIF_TERM ta_minindex(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]);
 
 #endif // Included ETALIBFNC_H
