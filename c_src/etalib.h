@@ -16,6 +16,7 @@ typedef struct {
     ERL_NIF_TERM    atom_low;
     ERL_NIF_TERM    atom_close;
     ERL_NIF_TERM    atom_volume;
+    ERL_NIF_TERM    atom_period;
 
     ERL_NIF_TERM    atom_sma;
     ERL_NIF_TERM    atom_ema;
@@ -40,6 +41,7 @@ typedef struct {
     double*    inLow;
     double*    inClose;
     double*    inVolume;
+    double*    inPeriod;
 
     double*    inValues0;
     double*    inValues1;

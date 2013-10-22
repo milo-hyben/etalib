@@ -21,6 +21,7 @@ load(ErlNifEnv* env, void** priv, ERL_NIF_TERM info)
     st->atom_low    = make_atom(env, "low");
     st->atom_close  = make_atom(env, "close");
     st->atom_volume = make_atom(env, "volume");
+    st->atom_period = make_atom(env, "period");
     st->atom_sma    = make_atom(env, "sma");
     st->atom_ema    = make_atom(env, "ema");
     st->atom_wma    = make_atom(env, "wma");
@@ -203,7 +204,9 @@ static ErlNifFunc funcs[] =
     {"nif_macd" ,2, ta_macd},
     {"nif_macdfix" ,2, ta_macdfix},
     {"nif_macdext" ,2, ta_macdext},
-    {"nif_minmaxindex" ,2, ta_minmaxindex}
+    {"nif_minmaxindex" ,2, ta_minmaxindex},
+    {"nif_mavp" ,2, ta_mavp}
+    
 };
 
 ERL_NIF_INIT(etalib, funcs, &load, &reload, &upgrade, &unload);

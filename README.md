@@ -166,6 +166,9 @@ Implemented so far:
 	etalib:macd(Prices,Options).
 	etalib:macdfix(Prices,Options).
 	etalib:macdext(Prices,Options).
+	etalib:minmaxindex(Prices,Options).
+
+	etalib:mavp(Prices,Options).
 
 TODO:
 

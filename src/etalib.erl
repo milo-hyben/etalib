@@ -149,7 +149,8 @@
     macd/2,
     macdfix/2,
     macdext/2,
-    minmaxindex/2
+    minmaxindex/2,
+    mavp/2
 ]).
 
 -define(NOT_LOADED, not_loaded(?LINE)).
@@ -1187,6 +1188,13 @@ minmaxindex(Data, Options)  ->
         IOData ->
             IOData
     end.
+mavp(Data, Options)  ->
+    case nif_mavp(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
 
 init() ->
     PrivDir = case code:priv_dir(?MODULE) of
@@ -1496,4 +1504,6 @@ nif_macdfix(_Data, _Options) ->
 nif_macdext(_Data, _Options) ->
     ?NOT_LOADED.    
 nif_minmaxindex(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_mavp(_Data, _Options) ->
     ?NOT_LOADED.

@@ -151,6 +151,14 @@ init_input_arrays(ErlNifEnv* env, ERL_NIF_TERM opts, EtaStruct* e)
         result = init_input(env, e, e->atoms->atom_volume, array, &(e->inVolume));
         if(result==-1)
             return -1;
+
+        if(result==1)
+            continue; // tuple is Volume
+
+        // Period
+        result = init_input(env, e, e->atoms->atom_period, array, &(e->inPeriod));
+        if(result==-1)
+            return -1;
     }
 
     return 1;
@@ -262,6 +270,7 @@ eta_init(EtaStruct* e, ErlNifEnv* env, const ERL_NIF_TERM argv[])
     e->inLow = NULL;
     e->inClose = NULL;
     e->inVolume = NULL;
+    e->inPeriod = NULL;
     
     e->inValues0 = NULL;
     e->inValues1 = NULL;
@@ -310,6 +319,11 @@ eta_destroy(EtaStruct* e)
     if(e->inVolume != NULL) {
         enif_free(e->inVolume);
         e->inVolume = NULL;
+    }
+
+    if(e->inPeriod != NULL) {
+        enif_free(e->inPeriod);
+        e->inPeriod = NULL;
     }
 
     if(e->outDblValues0 != NULL) {
@@ -390,6 +404,9 @@ assign_array(EtaStruct* e, ERL_NIF_TERM priceType)
 
     if(enif_compare(priceType, e->atoms->atom_volume) == 0)
         return e->inVolume;
+
+    if(enif_compare(priceType, e->atoms->atom_period) == 0)
+        return e->inPeriod;
 
     return NULL;
 }
