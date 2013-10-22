@@ -169,6 +169,8 @@ Implemented so far:
 	etalib:minmaxindex(Prices,Options).
 
 	etalib:mavp(Prices,Options).
+	etalib:ppo(Prices,Options).
+	etalib:apo(Prices,Options).
 
 TODO:
 

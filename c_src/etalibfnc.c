@@ -1610,3 +1610,85 @@ ta_mavp(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
     // return the results;
     return results;   
 }
+
+ERL_NIF_TERM
+ta_ppo(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // declare the variables
+    EtaStruct eta;
+    EtaStruct* e = &eta;
+
+    if(init_function_input_params(env, argc, argv, e)==1)
+    {// something wrong with input arguments, clean up and return bad argument error
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+    
+    // extract option values
+    int optInFastPeriod = (int)extract_option(env, argv[1], "fast_period", 2);
+    int optInSlowPeriod = (int)extract_option(env, argv[1], "slow_period", 2);
+    int optInMAType = extract_ma_type_option(env, e, argv[1], "ma_type", 0); // by default SMA
+
+    // call TA-Lib function
+    TA_RetCode retCode = TA_PPO( 
+        e->startIdx,
+        e->endIdx,
+        e->inValues0,
+        optInFastPeriod, 
+        optInSlowPeriod,
+        optInMAType,
+        &e->outBegIdx,
+        &e->outNBElement,
+        &e->outDblValues0[0]
+    );
+
+    // generate results
+    ERL_NIF_TERM results = eta_generate_results_double(e, retCode, e->outDblValues0);
+
+    // clean up
+    eta_destroy(e);
+
+    // return the results;
+    return results;   
+}
+
+ERL_NIF_TERM
+ta_apo(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // declare the variables
+    EtaStruct eta;
+    EtaStruct* e = &eta;
+
+    if(init_function_input_params(env, argc, argv, e)==1)
+    {// something wrong with input arguments, clean up and return bad argument error
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+    
+    // extract option values
+    int optInFastPeriod = (int)extract_option(env, argv[1], "fast_period", 2);
+    int optInSlowPeriod = (int)extract_option(env, argv[1], "slow_period", 2);
+    int optInMAType = extract_ma_type_option(env, e, argv[1], "ma_type", 0); // by default SMA
+
+    // call TA-Lib function
+    TA_RetCode retCode = TA_APO( 
+        e->startIdx,
+        e->endIdx,
+        e->inValues0,
+        optInFastPeriod, 
+        optInSlowPeriod,
+        optInMAType,
+        &e->outBegIdx,
+        &e->outNBElement,
+        &e->outDblValues0[0]
+    );
+
+    // generate results
+    ERL_NIF_TERM results = eta_generate_results_double(e, retCode, e->outDblValues0);
+
+    // clean up
+    eta_destroy(e);
+
+    // return the results;
+    return results;   
+}
