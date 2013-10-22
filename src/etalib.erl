@@ -152,7 +152,9 @@
     minmaxindex/2,
     mavp/2,
     ppo/2,
-    apo/2
+    apo/2,
+    ht_phasor/2,
+    ht_sine/2
 ]).
 
 -define(NOT_LOADED, not_loaded(?LINE)).
@@ -1211,6 +1213,21 @@ apo(Data, Options)  ->
         IOData ->
             IOData
     end.
+ht_phasor(Data, Options)  ->
+    case nif_ht_phasor(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+ht_sine(Data, Options)  ->
+    case nif_ht_sine(Data, Options) of
+        {error, _} = Error ->
+            throw(Error);
+        IOData ->
+            IOData
+    end.
+
 
 init() ->
     PrivDir = case code:priv_dir(?MODULE) of
@@ -1526,4 +1543,8 @@ nif_mavp(_Data, _Options) ->
 nif_ppo(_Data, _Options) ->
     ?NOT_LOADED.
 nif_apo(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_ht_phasor(_Data, _Options) ->
+    ?NOT_LOADED.
+nif_ht_sine(_Data, _Options) ->
     ?NOT_LOADED.

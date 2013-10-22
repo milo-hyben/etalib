@@ -171,6 +171,8 @@ Implemented so far:
 	etalib:mavp(Prices,Options).
 	etalib:ppo(Prices,Options).
 	etalib:apo(Prices,Options).
+	etalib:ht_phasor(Prices,Options).
+	etalib:ht_sine(Prices,Options).
 
 TODO:
 

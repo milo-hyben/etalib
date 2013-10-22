@@ -207,8 +207,10 @@ static ErlNifFunc funcs[] =
     {"nif_minmaxindex" ,2, ta_minmaxindex},
     {"nif_mavp" ,2, ta_mavp},
     {"nif_ppo" ,2, ta_ppo},
-    {"nif_apo" ,2, ta_apo}
-   
+    {"nif_apo" ,2, ta_apo},
+    {"nif_ht_phasor" ,2, ta_ht_phasor},
+    {"nif_ht_sine" ,2, ta_ht_sine}
+  
 };
 
 ERL_NIF_INIT(etalib, funcs, &load, &reload, &upgrade, &unload);

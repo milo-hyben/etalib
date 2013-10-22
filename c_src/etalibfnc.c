@@ -1692,3 +1692,72 @@ ta_apo(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
     // return the results;
     return results;   
 }
+
+ERL_NIF_TERM
+ta_ht_phasor(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // declare the variables
+    EtaStruct eta;
+    EtaStruct* e = &eta;
+
+    if(init_function_input_params_two_out(env, argc, argv, e)==1)
+    {// something wrong with input arguments, clean up and return bad argument error
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+    
+    // call TA-Lib function
+    TA_RetCode retCode = TA_HT_PHASOR( 
+        e->startIdx,
+        e->endIdx,
+        e->inValues0,
+        &e->outBegIdx,
+        &e->outNBElement,
+        &e->outDblValues0[0],
+        &e->outDblValues1[0]
+    );
+
+    // generate results
+    ERL_NIF_TERM results = eta_generate_results_two(e, retCode, "phase", "quadrature");
+
+    // clean up
+    eta_destroy(e);
+
+    // return the results;
+    return results;   
+}
+
+
+ERL_NIF_TERM
+ta_ht_sine(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
+{
+    // declare the variables
+    EtaStruct eta;
+    EtaStruct* e = &eta;
+
+    if(init_function_input_params_two_out(env, argc, argv, e)==1)
+    {// something wrong with input arguments, clean up and return bad argument error
+        eta_destroy(e);
+        return enif_make_badarg(env);
+    }
+    
+    // call TA-Lib function
+    TA_RetCode retCode = TA_HT_SINE( 
+        e->startIdx,
+        e->endIdx,
+        e->inValues0,
+        &e->outBegIdx,
+        &e->outNBElement,
+        &e->outDblValues0[0],
+        &e->outDblValues1[0]
+    );
+
+    // generate results
+    ERL_NIF_TERM results = eta_generate_results_two(e, retCode, "sine", "lead_sine");
+
+    // clean up
+    eta_destroy(e);
+
+    // return the results;
+    return results;   
+}
